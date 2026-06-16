@@ -9,6 +9,8 @@ import { cartItemsToCheckoutItems } from "@/types/order";
 const inputClass =
   "min-h-11 w-full rounded-[15px] border border-[var(--border)] bg-white px-3 py-2.5 text-sm font-semibold text-[var(--text)] outline-none transition placeholder:text-slate-400 focus:border-[var(--teal)] focus:ring-4 focus:ring-[var(--ring)] sm:min-h-12 sm:rounded-2xl sm:px-4 sm:py-3";
 
+const egyptianMobilePattern = /^01[0125][0-9]{8}$/;
+
 const governorates = [
   "القاهرة",
   "الجيزة",
@@ -90,6 +92,12 @@ export function CheckoutForm() {
 
     if (missingField) {
       setError("من فضلك أكمل الاسم، رقم الهاتف، المحافظة، والعنوان التفصيلي.");
+      return;
+    }
+
+    const phone = String(formData.get("phone") ?? "").trim();
+    if (!egyptianMobilePattern.test(phone)) {
+      setError("من فضلك اكتب رقم موبايل مصري صحيح يبدأ بـ 01.");
       return;
     }
 

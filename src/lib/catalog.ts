@@ -12,6 +12,7 @@ type CategoryRow = {
   icon: string | null;
   description: string | null;
   product_count: string;
+  sort_order?: number;
   is_active?: boolean;
 };
 
@@ -38,6 +39,7 @@ const mapCategory = (row: CategoryRow): Category => ({
   icon: row.icon ?? "•",
   description: row.description ?? "",
   productCount: Number(row.product_count),
+  sortOrder: row.sort_order,
   isActive: row.is_active,
 });
 
@@ -113,6 +115,7 @@ export const getCategories = async (includeInactive = false): Promise<Category[]
           c.name,
           c.icon,
           c.description,
+          c.sort_order,
           c.is_active,
           count(p.id) as product_count
         from categories c

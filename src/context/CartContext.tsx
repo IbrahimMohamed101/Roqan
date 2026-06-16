@@ -74,10 +74,10 @@ const hydrateStoredItems = (
 
       return {
         product,
-        quantity: storedItem.quantity,
+        quantity: Math.min(storedItem.quantity, Math.max(product.stock, 0), 99),
       };
     })
-    .filter((item): item is CartItem => Boolean(item));
+    .filter((item): item is CartItem => item !== null && item.quantity > 0);
 
 export function CartProvider({
   children,

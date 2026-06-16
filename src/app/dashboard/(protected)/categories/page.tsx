@@ -107,7 +107,7 @@ export default async function DashboardCategoriesPage({
             <input className={inputClass} defaultValue={category.name} name="name" required />
             <input className={inputClass} defaultValue={category.slug} name="slug" required />
             <input className={inputClass} defaultValue={category.icon} name="icon" />
-            <input className={inputClass} defaultValue={index} name="sortOrder" type="number" />
+            <input className={inputClass} defaultValue={category.sortOrder ?? index} name="sortOrder" type="number" />
             <label className="flex items-center gap-2 text-sm font-bold">
               <input defaultChecked={category.isActive !== false} name="isActive" type="checkbox" /> نشطة
             </label>

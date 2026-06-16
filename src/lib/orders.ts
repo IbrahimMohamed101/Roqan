@@ -45,6 +45,8 @@ type LockedProductRow = {
   is_active: boolean;
 };
 
+const egyptianMobilePattern = /^01[0125][0-9]{8}$/;
+
 const createPublicOrderId = () =>
   `RQ-${randomUUID().replaceAll("-", "").toUpperCase()}`;
 
@@ -100,6 +102,10 @@ export const validateCheckoutPayload = (payload: CheckoutPayload) => {
 
   if (required.some((value) => value.trim().length < 2)) {
     return "من فضلك أكمل الاسم، رقم الهاتف، المحافظة، والعنوان التفصيلي.";
+  }
+
+  if (!egyptianMobilePattern.test(phone.trim())) {
+    return "من فضلك اكتب رقم موبايل مصري صحيح يبدأ بـ 01.";
   }
 
   if (!items.length) {

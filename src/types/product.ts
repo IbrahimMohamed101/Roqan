@@ -5,6 +5,7 @@ export type Category = {
   icon: string;
   description: string;
   productCount: number;
+  sortOrder?: number;
   isActive?: boolean;
 };
 
