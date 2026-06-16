@@ -1,0 +1,54 @@
+import type { Metadata } from "next";
+import { createWhatsAppUrl, storeConfig } from "@/lib/storeConfig";
+
+export const metadata: Metadata = {
+  title: "تواصل معنا | روقان",
+  description: "تواصل مع متجر روقان عبر واتساب أو البريد الإلكتروني.",
+  alternates: {
+    canonical: "/contact",
+  },
+  openGraph: {
+    description: "تواصل مع متجر روقان عبر واتساب أو البريد الإلكتروني.",
+    title: "تواصل معنا | روقان",
+    type: "website",
+    url: "/contact",
+  },
+};
+
+export default function ContactPage() {
+  return (
+    <div className="container-shell section-y">
+      <section className="grid gap-5 lg:grid-cols-[1fr_0.85fr] lg:items-start">
+        <div className="rounded-[28px] border border-[var(--border)] bg-white p-6 shadow-soft sm:p-8">
+          <p className="text-sm font-black text-[var(--teal)]">خدمة العملاء</p>
+          <h1 className="mt-2 text-3xl font-black text-[var(--primary)]">
+            نحن قريبون منك.
+          </h1>
+          <p className="mt-4 max-w-2xl text-base leading-8 text-[var(--muted)]">
+            ارسل لنا اسم المنتج أو صورة المنتج المطلوب، وسنساعدك بتأكيد السعر
+            والتوفر وطريقة الشحن.
+          </p>
+          <a
+            className="btn-primary mt-6"
+            href={createWhatsAppUrl("مرحبًا روقان، أريد الاستفسار عن منتج.")}
+            rel="noreferrer"
+            target="_blank"
+          >
+            تواصل عبر واتساب
+          </a>
+        </div>
+        <div className="rounded-[28px] border border-[rgba(17,155,181,0.2)] bg-[var(--light-cyan)] p-6 shadow-soft sm:p-8">
+          <h2 className="text-xl font-black text-[var(--text)]">بيانات روقان</h2>
+          <div className="mt-5 grid gap-4 text-sm font-bold leading-7 text-[var(--muted)]">
+            <div className="rounded-2xl bg-white p-4 shadow-sm">واتساب: {storeConfig.whatsapp}</div>
+            <div className="rounded-2xl bg-white p-4 shadow-sm">البريد: {storeConfig.email}</div>
+            <div className="rounded-2xl bg-white p-4 shadow-sm">العنوان: {storeConfig.address}</div>
+            <div className="rounded-2xl bg-white p-4 shadow-sm">
+              مواعيد الرد: يوميًا من 10 صباحًا إلى 10 مساءً
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}

@@ -1,103 +1,93 @@
-import Image from "next/image";
+import { CategoryGrid } from "@/components/store/CategoryGrid";
+import { HeroSection } from "@/components/store/HeroSection";
+import { ProductGrid } from "@/components/store/ProductGrid";
+import { SectionHeader } from "@/components/store/SectionHeader";
+import { getCatalog } from "@/lib/catalog";
+import { createWhatsAppUrl } from "@/lib/storeConfig";
 
-export default function Home() {
+export default async function Home() {
+  const { categories, products } = await getCatalog();
+  const featuredProducts = products.filter((product) => product.featured);
+  const bestSellerProducts = products.filter((product) => product.bestSeller);
+  const newProducts = products.filter((product) => product.isNew);
+  const offerProducts = products.filter((product) => product.discount);
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="container-shell">
+      <div className="section-y">
+        <HeroSection />
+      </div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
+      <section className="section-y">
+        <SectionHeader
+          action="كل الفئات"
+          description="اختيارات منظمة حسب استخدامك اليومي، من البيت والمطبخ إلى التقنية واللياقة."
+          href="/categories"
+          title="تسوق حسب الفئة"
+        />
+        <CategoryGrid categories={categories} />
+      </section>
+
+      <section className="section-y">
+        <SectionHeader
+          action="عرض المزيد"
+          description="منتجات مختارة لتبدأ منها التسوق بسرعة."
+          href="/categories"
+          title="منتجات مميزة"
+        />
+        <ProductGrid products={featuredProducts.slice(0, 8)} />
+      </section>
+
+      <section className="section-y">
+        <SectionHeader
+          action="شاهد العروض"
+          description="الأكثر طلبًا من عملاء روقان هذا الأسبوع."
+          href="/offers"
+          title="الأكثر مبيعًا"
+        />
+        <ProductGrid products={bestSellerProducts.slice(0, 4)} />
+      </section>
+
+      <section className="section-y">
+        <div className="overflow-hidden rounded-[28px] bg-[linear-gradient(135deg,var(--primary-dark)_0%,var(--primary)_58%,#17647f_100%)] p-5 text-white shadow-soft [--border:rgba(255,255,255,0.24)] [--muted:rgba(255,255,255,0.76)] [--text:#ffffff] sm:p-8">
+          <SectionHeader
+            action="كل العروض"
+            description="خصومات واضحة على منتجات عملية بدون زحمة أو مبالغة."
+            href="/offers"
+            title="عروض روقان"
+          />
+          <ProductGrid products={offerProducts.slice(0, 4)} />
+        </div>
+      </section>
+
+      <section className="section-y">
+        <SectionHeader
+          description="وصل حديثًا للمتجر، مناسب للهدايا والاستخدام اليومي."
+          title="وصل حديثًا"
+        />
+        <ProductGrid products={newProducts.slice(0, 8)} />
+      </section>
+
+      <section className="section-y">
+        <div className="rounded-[28px] border border-[rgba(17,155,181,0.2)] bg-[linear-gradient(135deg,#E8F8FB_0%,#FFFFFF_100%)] p-6 shadow-soft sm:p-8">
+          <p className="text-sm font-black text-[var(--teal)]">تحتاج مساعدة؟</p>
+          <h2 className="mt-2 text-2xl font-black text-[var(--primary)] sm:text-3xl">
+            اطلب المنتج أو اسألنا على واتساب.
+          </h2>
+          <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--muted)] sm:text-base">
+            فريق روقان يساعدك تختار المنتج المناسب، ويؤكد تفاصيل الطلب قبل
+            الشحن.
+          </p>
           <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+            className="btn-primary mt-5"
+            href={createWhatsAppUrl("مرحبًا روقان، أحتاج مساعدة في اختيار منتج.")}
+            rel="noreferrer"
             target="_blank"
-            rel="noopener noreferrer"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
+            تواصل عبر واتساب
           </a>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </section>
     </div>
   );
 }
