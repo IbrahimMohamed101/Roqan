@@ -140,14 +140,29 @@ button:disabled {
 
 @media (max-width: 640px) {
   .container-shell {
-    padding-inline: 16px;
+    padding-inline: 12px;
   }
 
   .section-y {
-    padding-block: 28px;
+    padding-block: 22px;
+  }
+
+  .btn-primary,
+  .btn-secondary,
+  .link-pill {
+    border-radius: 15px;
+    gap: 6px;
+    min-height: 42px;
+    padding: 9px 14px;
   }
 
   .shadow-soft {
-    box-shadow: 0 12px 28px rgba(18, 63, 109, 0.07);
+    box-shadow: 0 10px 24px rgba(18, 63, 109, 0.065);
+  }
+}
+
+@media (max-width: 360px) {
+  .container-shell {
+    padding-inline: 10px;
   }
 }
