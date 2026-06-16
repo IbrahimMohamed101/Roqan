@@ -5,29 +5,29 @@ import { TrustBadges } from "./TrustBadges";
 
 export function HeroSection() {
   return (
-    <section className="relative overflow-hidden rounded-[20px] border border-white bg-[linear-gradient(135deg,#E9F9FC_0%,#FFFFFF_48%,#FFF0E7_100%)] px-3 py-5 shadow-soft ring-1 ring-[var(--border)] sm:rounded-[28px] sm:p-8 lg:p-10">
+    <section className="relative overflow-hidden rounded-[18px] border border-white bg-[linear-gradient(135deg,#E9F9FC_0%,#FFFFFF_48%,#FFF0E7_100%)] px-3 py-4 shadow-soft ring-1 ring-[var(--border)] sm:rounded-[28px] sm:p-8 lg:p-10">
       <div className="pointer-events-none absolute -left-20 top-8 hidden size-64 rounded-full bg-white/70 blur-3xl sm:block" />
       <div className="pointer-events-none absolute -right-24 bottom-0 hidden size-72 rounded-full bg-[rgba(17,155,181,0.13)] blur-3xl sm:block" />
       <div className="relative grid gap-5 lg:grid-cols-[minmax(0,1.14fr)_minmax(280px,0.86fr)] lg:items-center xl:gap-10">
         <div className="text-center lg:text-start">
-          <p className="mb-3 inline-flex max-w-full rounded-full border border-white/80 bg-white/85 px-3 py-1.5 text-xs font-black leading-5 text-[var(--teal)] shadow-sm sm:mb-4 sm:px-4 sm:py-2 sm:text-sm">
+          <p className="mb-2 inline-flex max-w-full rounded-full border border-white/80 bg-white/85 px-2.5 py-1 text-[11px] font-black leading-5 text-[var(--teal)] shadow-sm sm:mb-4 sm:px-4 sm:py-2 sm:text-sm">
             روقان لكل بيت هادي ومنظم
           </p>
-          <h1 className="mx-auto max-w-3xl text-[1.42rem] font-black leading-[1.35] text-[var(--primary)] min-[390px]:text-[1.62rem] sm:text-5xl lg:mx-0 lg:text-[3.35rem] xl:text-6xl">
+          <h1 className="mx-auto max-w-3xl text-[1.2rem] font-black leading-[1.42] text-[var(--primary)] min-[390px]:text-[1.36rem] sm:text-5xl lg:mx-0 lg:text-[3.35rem] xl:text-6xl">
             منتجات منزلية وعصرية مختارة بعناية لتجربة شراء بسيطة ومريحة.
           </h1>
-          <p className="mx-auto mt-3 max-w-2xl text-[13px] leading-6 text-[var(--muted)] sm:mt-5 sm:text-lg sm:leading-8 lg:mx-0">
+          <p className="mx-auto mt-2 max-w-2xl text-xs leading-6 text-[var(--muted)] min-[390px]:text-[13px] sm:mt-5 sm:text-lg sm:leading-8 lg:mx-0">
             تسوق أدوات البيت والمطبخ والتنظيف والإكسسوارات اليومية بأسعار واضحة
             ودفع عند الاستلام.
           </p>
-          <div className="mt-4 flex justify-center lg:justify-start">
+          <div className="mt-3 flex justify-center lg:justify-start">
             <TrustBadges />
           </div>
-          <div className="mt-5 grid gap-2 min-[390px]:grid-cols-[1fr_auto] sm:inline-grid sm:grid-flow-col sm:justify-center sm:gap-3 lg:justify-start">
+          <div className="mt-4 grid gap-2 min-[390px]:grid-cols-[1fr_auto] sm:inline-grid sm:grid-flow-col sm:justify-center sm:gap-3 lg:justify-start">
             <Link className="btn-primary w-full min-[390px]:px-5 sm:w-auto" href="/categories">
               تسوق الآن
             </Link>
-            <Link className="btn-secondary w-full bg-white/75 min-[390px]:px-4 sm:w-auto" href="/offers">
+            <Link className="btn-secondary w-full bg-white/70 text-[var(--teal)] shadow-none min-[390px]:px-4 sm:w-auto" href="/offers">
               شاهد العروض
             </Link>
           </div>

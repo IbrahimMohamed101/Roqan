@@ -25,8 +25,8 @@ export function SearchBox({
 
   return (
     <form
-      className={`flex w-full min-w-0 items-center rounded-[16px] border border-[var(--border)] bg-white/95 shadow-soft transition focus-within:border-[var(--teal)] focus-within:ring-4 focus-within:ring-[var(--ring)] sm:gap-2 sm:rounded-[20px] sm:p-2 ${
-        compact ? "min-h-10 gap-1 p-1 sm:min-h-12" : "min-h-12 gap-1.5 p-1.5 sm:min-h-14"
+      className={`flex w-full min-w-0 items-center rounded-[14px] border border-[var(--border)] bg-white/95 shadow-soft transition focus-within:border-[var(--teal)] focus-within:ring-4 focus-within:ring-[var(--ring)] sm:gap-2 sm:rounded-[20px] sm:p-2 ${
+        compact ? "min-h-9 gap-1 p-1 sm:min-h-12" : "min-h-11 gap-1.5 p-1.5 sm:min-h-14"
       }`}
       onSubmit={onSubmit}
       role="search"
@@ -36,14 +36,14 @@ export function SearchBox({
       </span>
       <input
         aria-label="بحث عن المنتجات"
-        className="min-w-0 flex-1 bg-transparent px-1 text-[13px] font-semibold text-[var(--text)] outline-none placeholder:text-[var(--muted)] sm:text-sm"
+        className="min-w-0 flex-1 bg-transparent px-1 text-xs font-semibold text-[var(--text)] outline-none placeholder:text-[var(--muted)] min-[360px]:text-[13px] sm:text-sm"
         onChange={(event) => setQuery(event.target.value)}
         placeholder={placeholder}
         value={query}
       />
       <button
-        className={`btn-primary shrink-0 rounded-[13px] px-3 text-xs sm:rounded-[18px] sm:px-4 sm:text-sm ${
-          compact ? "min-h-8 sm:min-h-11" : "min-h-9 sm:min-h-11"
+        className={`btn-primary shrink-0 rounded-[12px] !px-2.5 !py-1 text-[11px] sm:rounded-[18px] sm:!px-4 sm:!py-2 sm:text-sm ${
+          compact ? "!min-h-7 sm:!min-h-11" : "!min-h-8 sm:!min-h-11"
         }`}
         type="submit"
       >

@@ -25,6 +25,7 @@
 
 html {
   background: var(--background);
+  overflow-x: hidden;
   scroll-behavior: smooth;
 }
 
@@ -69,6 +70,7 @@ button:disabled {
 .container-shell {
   margin-inline: auto;
   max-width: 1200px;
+  min-width: 0;
   padding-inline: 18px;
   width: 100%;
 }
@@ -140,11 +142,11 @@ button:disabled {
 
 @media (max-width: 640px) {
   .container-shell {
-    padding-inline: 12px;
+    padding-inline: 14px;
   }
 
   .section-y {
-    padding-block: 22px;
+    padding-block: 18px;
   }
 
   .btn-primary,
@@ -152,8 +154,8 @@ button:disabled {
   .link-pill {
     border-radius: 15px;
     gap: 6px;
-    min-height: 42px;
-    padding: 9px 14px;
+    min-height: 40px;
+    padding: 8px 12px;
   }
 
   .shadow-soft {
@@ -163,6 +165,6 @@ button:disabled {
 
 @media (max-width: 360px) {
   .container-shell {
-    padding-inline: 10px;
+    padding-inline: 12px;
   }
 }

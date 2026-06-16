@@ -4,20 +4,20 @@ import { LogoBrand } from "./LogoBrand";
 
 export function StoreFooter() {
   return (
-    <footer className="mt-10 border-t border-[var(--border)] bg-white/90 sm:mt-16">
-      <div className="container-shell grid gap-6 py-8 sm:gap-8 sm:py-10 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
+    <footer className="mt-6 border-t border-[var(--border)] bg-white/90 sm:mt-16">
+      <div className="container-shell grid gap-5 py-6 sm:gap-8 sm:py-10 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
         <div>
           <LogoBrand />
-          <p className="mt-3 max-w-md text-sm leading-7 text-[var(--muted)] sm:mt-4">
+          <p className="mt-2 max-w-md text-xs leading-6 text-[var(--muted)] sm:mt-4 sm:text-sm sm:leading-7">
             روقان متجر عربي بسيط للمنتجات المنزلية والعصرية. نركز على اختيارات
             عملية، أسعار واضحة، وتجربة شراء هادئة من أول بحث حتى تأكيد الطلب.
           </p>
         </div>
         <div>
-          <h3 className="mb-2 text-base font-black text-[var(--text)] sm:mb-4">
+          <h3 className="mb-1.5 text-sm font-black text-[var(--text)] sm:mb-4 sm:text-base">
             روابط مفيدة
           </h3>
-          <div className="grid gap-1 text-sm font-bold text-[var(--muted)]">
+          <div className="grid gap-0.5 text-xs font-bold text-[var(--muted)] sm:gap-1 sm:text-sm">
             <Link className="inline-flex min-h-9 items-center transition hover:text-[var(--primary)] sm:min-h-11" href="/categories">
               كل الفئات
             </Link>
@@ -33,10 +33,10 @@ export function StoreFooter() {
           </div>
         </div>
         <div>
-          <h3 className="mb-2 text-base font-black text-[var(--text)] sm:mb-4">
+          <h3 className="mb-1.5 text-sm font-black text-[var(--text)] sm:mb-4 sm:text-base">
             السياسات
           </h3>
-          <div className="grid gap-1 text-sm font-bold text-[var(--muted)]">
+          <div className="grid gap-0.5 text-xs font-bold text-[var(--muted)] sm:gap-1 sm:text-sm">
             <Link className="inline-flex min-h-9 items-center transition hover:text-[var(--primary)] sm:min-h-11" href="/shipping-policy">
               سياسة الشحن
             </Link>
@@ -52,10 +52,10 @@ export function StoreFooter() {
           </div>
         </div>
         <div>
-          <h3 className="mb-2 text-base font-black text-[var(--text)] sm:mb-4">
+          <h3 className="mb-1.5 text-sm font-black text-[var(--text)] sm:mb-4 sm:text-base">
             بيانات التواصل
           </h3>
-          <div className="grid gap-2 text-sm leading-7 text-[var(--muted)]">
+          <div className="grid gap-1.5 text-xs leading-6 text-[var(--muted)] sm:gap-2 sm:text-sm sm:leading-7">
             <span>واتساب: {storeConfig.whatsapp}</span>
             <span>البريد: {storeConfig.email}</span>
             <span>{storeConfig.address}</span>

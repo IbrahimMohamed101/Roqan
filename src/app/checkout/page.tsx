@@ -14,15 +14,15 @@ export const metadata: Metadata = {
 export default function CheckoutPage() {
   return (
     <div>
-      <div className="bg-[linear-gradient(135deg,#119b7d_0%,#0f8f76_100%)] py-3 text-center text-sm font-black text-white">
+      <div className="bg-[linear-gradient(135deg,#119b7d_0%,#0f8f76_100%)] py-2.5 text-center text-xs font-black text-white sm:py-3 sm:text-sm">
         متاح المعاينة قبل الاستلام
       </div>
       <div className="container-shell section-y">
-        <div className="mb-7 text-center">
-          <h1 className="text-3xl font-black text-[var(--text)] sm:text-4xl">
+        <div className="mb-4 text-center sm:mb-7">
+          <h1 className="text-2xl font-black text-[var(--text)] sm:text-4xl">
             إتمام الطلب
           </h1>
-          <p className="mt-2 text-sm font-bold text-[var(--muted)]">
+          <p className="mt-1.5 text-xs font-bold leading-6 text-[var(--muted)] sm:mt-2 sm:text-sm">
             املأ بياناتك وسيتم تأكيد الطلب معك قبل الشحن.
           </p>
         </div>

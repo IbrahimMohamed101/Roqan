@@ -24,17 +24,17 @@ export default function CartPage() {
 
   return (
     <div className="container-shell section-y">
-      <div className="mb-7 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mb-4 flex flex-col gap-3 sm:mb-7 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-sm font-black text-[var(--teal)]">سلة التسوق</p>
-          <h1 className="mt-1 text-3xl font-black text-[var(--text)] sm:text-4xl">
+          <p className="text-xs font-black text-[var(--teal)] sm:text-sm">سلة التسوق</p>
+          <h1 className="mt-1 text-2xl font-black text-[var(--text)] sm:text-4xl">
             منتجاتك
           </h1>
-          <p className="mt-2 text-sm font-bold text-[var(--muted)]">
+          <p className="mt-1.5 text-xs font-bold leading-6 text-[var(--muted)] sm:mt-2 sm:text-sm">
             راجع المنتجات والكميات قبل إتمام الطلب. يتم تأكيد الطلب عبر الهاتف أو واتساب.
           </p>
         </div>
-        <button className="btn-secondary self-start" onClick={clearCart} type="button">
+        <button className="btn-secondary min-h-9 self-start text-xs sm:text-sm" onClick={clearCart} type="button">
           تفريغ السلة
         </button>
       </div>
@@ -42,7 +42,7 @@ export default function CartPage() {
         <div className="grid gap-3">
           {items.map((item) => (
             <article
-              className="grid grid-cols-[92px_1fr] gap-4 rounded-[24px] border border-[var(--border)] bg-white p-3 shadow-soft transition hover:border-[rgba(17,155,181,0.45)] sm:grid-cols-[120px_1fr_auto] sm:p-4"
+              className="grid grid-cols-[78px_minmax(0,1fr)] gap-3 rounded-[18px] border border-[var(--border)] bg-white p-3 shadow-soft transition hover:border-[rgba(17,155,181,0.45)] min-[390px]:grid-cols-[92px_minmax(0,1fr)] sm:grid-cols-[120px_1fr_auto] sm:rounded-[24px] sm:gap-4 sm:p-4"
               key={item.product.slug}
             >
               <Link
@@ -59,7 +59,7 @@ export default function CartPage() {
               </Link>
               <div className="min-w-0">
                 <Link
-                  className="text-base font-black leading-7 text-[var(--text)]"
+                  className="line-clamp-2 text-sm font-black leading-6 text-[var(--text)] sm:text-base sm:leading-7"
                   href={`/product/${item.product.slug}`}
                 >
                   {item.product.name}
@@ -76,7 +76,7 @@ export default function CartPage() {
                     المتاح حاليا {item.product.stock} فقط
                   </p>
                 ) : null}
-                <div className="mt-3">
+                <div className="mt-2 sm:mt-3">
                   <QuantityControl
                     onDecrease={() => decreaseItem(item.product.slug)}
                     onIncrease={() => increaseItem(item.product.slug)}
@@ -85,7 +85,7 @@ export default function CartPage() {
                 </div>
               </div>
               <button
-                className="col-span-2 min-h-11 rounded-2xl border border-[var(--border)] px-4 text-sm font-black text-[var(--danger)] transition hover:border-red-200 hover:bg-red-50 sm:col-span-1 sm:self-center"
+                className="col-span-2 min-h-9 rounded-[14px] border border-[var(--border)] px-4 text-xs font-black text-[var(--danger)] transition hover:border-red-200 hover:bg-red-50 sm:col-span-1 sm:min-h-11 sm:rounded-2xl sm:self-center sm:text-sm"
                 onClick={() => removeItem(item.product.slug)}
                 type="button"
               >

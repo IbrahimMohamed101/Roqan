@@ -7,7 +7,7 @@ import { submitCheckout } from "@/app/checkout/actions";
 import { cartItemsToCheckoutItems } from "@/types/order";
 
 const inputClass =
-  "min-h-12 w-full rounded-2xl border border-[var(--border)] bg-white px-4 py-3 text-sm font-semibold text-[var(--text)] outline-none transition placeholder:text-slate-400 focus:border-[var(--teal)] focus:ring-4 focus:ring-[var(--ring)]";
+  "min-h-11 w-full rounded-[15px] border border-[var(--border)] bg-white px-3 py-2.5 text-sm font-semibold text-[var(--text)] outline-none transition placeholder:text-slate-400 focus:border-[var(--teal)] focus:ring-4 focus:ring-[var(--ring)] sm:min-h-12 sm:rounded-2xl sm:px-4 sm:py-3";
 
 const governorates = [
   "القاهرة",
@@ -49,10 +49,10 @@ function StepCard({
   title: string;
 }) {
   return (
-    <section className="rounded-[24px] border border-[var(--border)] bg-white p-5 shadow-soft sm:p-6">
-      <div className="mb-5 flex items-center justify-between gap-4">
-        <h2 className="text-xl font-black text-[var(--text)]">{title}</h2>
-        <span className="grid size-9 shrink-0 place-items-center rounded-full bg-[var(--teal)] text-sm font-black text-white">
+    <section className="rounded-[20px] border border-[var(--border)] bg-white p-4 shadow-soft sm:rounded-[24px] sm:p-6">
+      <div className="mb-4 flex items-center justify-between gap-4 sm:mb-5">
+        <h2 className="text-lg font-black text-[var(--text)] sm:text-xl">{title}</h2>
+        <span className="grid size-8 shrink-0 place-items-center rounded-full bg-[var(--teal)] text-xs font-black text-white sm:size-9 sm:text-sm">
           {step}
         </span>
       </div>
@@ -124,7 +124,7 @@ export function CheckoutForm() {
 
   return (
     <form
-      className="grid gap-5"
+      className="grid gap-4 sm:gap-5"
       id="checkout-form"
       onSubmit={onSubmit}
     >
@@ -135,7 +135,7 @@ export function CheckoutForm() {
       ) : null}
 
       <StepCard step={1} title="معلومات التواصل">
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
           <label className="grid gap-2 text-sm font-bold text-[var(--text)]">
             الاسم *
             <input className={inputClass} name="name" placeholder="مثال: أحمد محمد" />
@@ -163,7 +163,7 @@ export function CheckoutForm() {
       </StepCard>
 
       <StepCard step={2} title="عنوان الشحن">
-        <div className="grid gap-4">
+        <div className="grid gap-3 sm:gap-4">
           <label className="grid gap-2 text-sm font-bold text-[var(--text)]">
             المحافظة *
             <select className={inputClass} defaultValue="" name="governorate">
@@ -181,7 +181,7 @@ export function CheckoutForm() {
           <label className="grid gap-2 text-sm font-bold text-[var(--text)]">
             العنوان بالتفصيل *
             <textarea
-              className={`${inputClass} min-h-28 resize-y`}
+              className={`${inputClass} min-h-24 resize-y sm:min-h-28`}
               name="address"
               placeholder="مثال: 15 شارع الجمهورية - عمارة 7 - الدور 3 - شقة 12"
             />
@@ -190,7 +190,7 @@ export function CheckoutForm() {
           <label className="grid gap-2 text-sm font-bold text-[var(--text)]">
             ملاحظات إضافية للطلب
             <textarea
-              className={`${inputClass} min-h-24 resize-y`}
+              className={`${inputClass} min-h-20 resize-y sm:min-h-24`}
               name="notes"
               placeholder="أي ملاحظة تخص الطلب أو وقت التواصل"
             />
