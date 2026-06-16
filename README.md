@@ -143,6 +143,34 @@ Manage products and categories from the dashboard:
 Local fallback data still exists in `src/data/` for development only when
 `DATABASE_URL` is missing. Production requires a working database.
 
+## Demo Seed Data
+
+For development and testing, the project includes an idempotent seed script that
+upserts demo categories and products into Neon using `DATABASE_URL` from
+`.env.local`.
+
+Required env vars:
+
+```env
+DATABASE_URL=postgresql://USER:PASSWORD@HOST/neondb?sslmode=verify-full&channel_binding=require
+SEED_DATABASE=true
+```
+
+Run:
+
+```bash
+SEED_DATABASE=true npm run db:seed
+```
+
+The seed creates 6 Arabic categories and 22 Arabic demo products for a
+home/lifestyle store. Product images use external HTTPS URLs from
+`images.unsplash.com`, which is already allowed by `next.config.ts`; no
+Cloudinary upload is required. The script uses `on conflict (slug) do update`,
+so it is safe to run multiple times without creating duplicates.
+
+This data is for testing/demo use only. The script refuses to run unless
+`SEED_DATABASE=true` is set, to reduce accidental writes to the wrong database.
+
 ## Checkout And Orders
 
 Checkout is cash on delivery only.
@@ -212,6 +240,7 @@ npm run build
 
 ```bash
 npm run dev
+npm run db:seed
 npm run lint
 npm run build
 npm run start
