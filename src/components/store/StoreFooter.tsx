@@ -4,7 +4,7 @@ import type { StoreSettings } from "@/lib/storeSettings";
 
 export function StoreFooter({ settings }: { settings: StoreSettings }) {
   return (
-    <footer className="mt-4 border-t border-[var(--border)] bg-white/90 pb-20 sm:pb-0">
+    <footer className="mt-4 border-t border-[var(--border)] bg-white/90 pb-0">
       <div className="container-shell container-shell-wide py-4">
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1 min-w-0">

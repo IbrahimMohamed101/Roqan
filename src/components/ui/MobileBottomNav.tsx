@@ -2,9 +2,36 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 
 export default function MobileBottomNav() {
-  const path = usePathname();
+  const path = usePathname() || "/";
+
+  const hiddenPrefixes = [
+    "/cart",
+    "/checkout",
+    "/order-confirmation",
+    "/dashboard",
+    "/terms",
+    "/privacy",
+    "/privacy-policy",
+    "/dashboard/login",
+  ];
+
+  const isHidden = hiddenPrefixes.some((p) => path === p || path.startsWith(p + "/") || path === p.replace(/\/$/, ""));
+
+  useEffect(() => {
+    // add a document class only when nav is visible so layout can apply conditional padding
+    const cls = "has-mobile-nav";
+    if (!isHidden) {
+      document.documentElement.classList.add(cls);
+    }
+    return () => {
+      document.documentElement.classList.remove(cls);
+    };
+  }, [isHidden]);
+
+  if (isHidden) return null;
 
   return (
     <nav className="mobile-bottom-nav fixed left-0 right-0 z-40 mx-auto max-w-3xl px-4 sm:hidden" aria-label="bottom navigation">

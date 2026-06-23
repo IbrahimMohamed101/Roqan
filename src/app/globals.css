@@ -17,6 +17,7 @@
   --danger: #dc2626;
   --warning: #f59e0b;
   --ring: rgba(17, 155, 181, 0.26);
+  --mobile-nav-height: 64px;
 }
 
 * {
@@ -251,5 +252,11 @@ button:disabled {
 .order-confirm-card {
   width: 100%;
   max-width: 38rem;
+}
+
+/* When mobile nav is present, add padding to main/footer so content isn't covered */
+@media (max-width: 640px) {
+  .has-mobile-nav main { padding-bottom: calc(var(--mobile-nav-height) + env(safe-area-inset-bottom)); }
+  .has-mobile-nav footer { padding-bottom: calc(var(--mobile-nav-height) + env(safe-area-inset-bottom)); }
 }
 

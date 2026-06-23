@@ -396,6 +396,10 @@ export type OrderListOptions = {
   pageSize?: number;
   query?: string;
   status?: OrderStatus | "all";
+  fromDate?: string; // YYYY-MM-DD
+  toDate?: string; // YYYY-MM-DD
+  governorate?: string;
+  sort?: "created_desc" | "created_asc" | "total_desc" | "total_asc";
 };
 
 export const getOrders = async ({
@@ -403,6 +407,10 @@ export const getOrders = async ({
   pageSize = 20,
   query: searchTerm = "",
   status = "all",
+  fromDate,
+  toDate,
+  governorate,
+  sort = "created_desc",
 }: OrderListOptions = {}) => {
   if (!hasDatabaseUrl()) {
     return {
@@ -423,7 +431,7 @@ export const getOrders = async ({
   if (searchTerm.trim()) {
     params.push(`%${searchTerm.trim()}%`);
     filters.push(
-      `(o.public_id ilike $${params.length} or o.customer_name ilike $${params.length} or o.customer_phone ilike $${params.length} or o.alternate_phone ilike $${params.length})`,
+      `(o.public_id ilike $${params.length} or o.customer_name ilike $${params.length} or o.customer_phone ilike $${params.length} or o.alternate_phone ilike $${params.length} or o.governorate ilike $${params.length})`,
     );
   }
 
@@ -432,11 +440,33 @@ export const getOrders = async ({
     filters.push(`o.status = $${params.length}::order_status`);
   }
 
+  if (fromDate) {
+    // include from date starting at 00:00
+    params.push(fromDate);
+    filters.push(`o.created_at >= $${params.length}::date`);
+  }
+
+  if (toDate) {
+    // include entire toDate day by using < (to_date + 1)
+    params.push(toDate);
+    filters.push(`o.created_at < ($${params.length}::date + interval '1 day')`);
+  }
+
+  if (governorate) {
+    params.push(governorate);
+    filters.push(`o.governorate = $${params.length}`);
+  }
+
   const whereClause = filters.length ? `where ${filters.join(" and ")}` : "";
   params.push(normalizedPageSize);
   const limitParam = params.length;
   params.push(offset);
   const offsetParam = params.length;
+  // determine order by
+  let orderBy = "o.created_at desc";
+  if (sort === "created_asc") orderBy = "o.created_at asc";
+  if (sort === "total_desc") orderBy = "o.total desc";
+  if (sort === "total_asc") orderBy = "o.total asc";
 
   const orderResult = await query<OrderWithItemsRow>(
     `
@@ -460,7 +490,7 @@ export const getOrders = async ({
       left join order_items oi on oi.order_id = o.id
       ${whereClause}
       group by o.id
-      order by o.created_at desc
+      order by ${orderBy}
       limit $${limitParam} offset $${offsetParam}
     `,
     params,
@@ -469,11 +499,54 @@ export const getOrders = async ({
   const total = Number(orderResult.rows[0]?.total_count ?? 0);
   const orders = orderResult.rows.map((order) => mapOrder(order, parseOrderItems(order.items)));
 
+  // summary aggregates (counts per status, sales, shipping, avg)
+  const summaryParams = [...params.slice(0, params.length - 2)];
+  const summaryWhere = filters.length ? `where ${filters.join(" and ")}` : "";
+  const summaryResult = await query<{
+    total_count: string;
+    total_sales: string | null;
+    total_shipping: string | null;
+    avg_order: string | null;
+    new_count: string | null;
+    confirmed_count: string | null;
+    shipped_count: string | null;
+    cancelled_count: string | null;
+  }>(
+    `
+      select
+        count(*) as total_count,
+        sum(case when o.status != 'cancelled' then o.total else 0 end)::numeric as total_sales,
+        sum(o.shipping)::numeric as total_shipping,
+        avg(case when o.status != 'cancelled' then o.total else null end)::numeric as avg_order,
+        sum(case when o.status = 'new' then 1 else 0 end) as new_count,
+        sum(case when o.status = 'confirmed' then 1 else 0 end) as confirmed_count,
+        sum(case when o.status = 'shipped' then 1 else 0 end) as shipped_count,
+        sum(case when o.status = 'cancelled' then 1 else 0 end) as cancelled_count
+      from orders o
+      ${summaryWhere}
+    `,
+    summaryParams,
+  );
+
+  const row = summaryResult.rows[0];
+
   return {
     orders,
     total,
     page: normalizedPage,
     pageSize: normalizedPageSize,
     totalPages: Math.max(Math.ceil(total / normalizedPageSize), 1),
+    summary: {
+      total: Number(row?.total_count ?? 0),
+      totalSales: row?.total_sales ? Number(row.total_sales) : 0,
+      totalShipping: row?.total_shipping ? Number(row.total_shipping) : 0,
+      avgOrder: row?.avg_order ? Number(row.avg_order) : 0,
+      counts: {
+        new: Number(row?.new_count ?? 0),
+        confirmed: Number(row?.confirmed_count ?? 0),
+        shipped: Number(row?.shipped_count ?? 0),
+        cancelled: Number(row?.cancelled_count ?? 0),
+      },
+    },
   };
 };
