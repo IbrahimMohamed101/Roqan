@@ -6,6 +6,8 @@ type DatabaseHealthRow = {
   current_database: string;
   current_schema: string;
   category_image_url_exists: boolean;
+  category_image_url_type: string | null;
+  category_image_url_nullable: string | null;
   store_settings_exists: boolean;
   order_alternate_phone_exists: boolean;
 };
@@ -29,6 +31,20 @@ export default async function DatabaseHealthPage() {
               and table_name = 'categories'
               and column_name = 'image_url'
           ) as category_image_url_exists,
+          (
+            select data_type
+            from information_schema.columns
+            where table_schema = 'public'
+              and table_name = 'categories'
+              and column_name = 'image_url'
+          ) as category_image_url_type,
+          (
+            select is_nullable
+            from information_schema.columns
+            where table_schema = 'public'
+              and table_name = 'categories'
+              and column_name = 'image_url'
+          ) as category_image_url_nullable,
           to_regclass('public.store_settings') is not null as store_settings_exists,
           exists (
             select 1
@@ -72,6 +88,18 @@ export default async function DatabaseHealthPage() {
             <dt className="font-black text-[var(--text)]">المخطط الحالي</dt>
             <dd className="font-mono text-sm font-bold text-[var(--muted)]">
               {health.current_schema}
+            </dd>
+          </div>
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--border)] pb-3">
+            <dt className="font-black text-[var(--text)]">نوع categories.image_url</dt>
+            <dd className="font-mono text-sm font-bold text-[var(--muted)]">
+              {health.category_image_url_type ?? "غير موجود"}
+            </dd>
+          </div>
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--border)] pb-3">
+            <dt className="font-black text-[var(--text)]">قابلية NULL</dt>
+            <dd className="font-mono text-sm font-bold text-[var(--muted)]">
+              {health.category_image_url_nullable ?? "غير موجود"}
             </dd>
           </div>
           {[
