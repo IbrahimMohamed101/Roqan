@@ -4,66 +4,38 @@ import { LogoBrand } from "./LogoBrand";
 
 export function StoreFooter() {
   return (
-    <footer className="mt-6 border-t border-[var(--border)] bg-white/90 sm:mt-16">
-      <div className="container-shell grid gap-5 py-6 sm:gap-8 sm:py-10 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
-        <div>
-          <LogoBrand />
-          <p className="mt-2 max-w-md text-xs leading-6 text-[var(--muted)] sm:mt-4 sm:text-sm sm:leading-7">
-            روقان متجر عربي بسيط للمنتجات المنزلية والعصرية. نركز على اختيارات
-            عملية، أسعار واضحة، وتجربة شراء هادئة من أول بحث حتى تأكيد الطلب.
-          </p>
-        </div>
-        <div>
-          <h3 className="mb-1.5 text-sm font-black text-[var(--text)] sm:mb-4 sm:text-base">
-            روابط مفيدة
-          </h3>
-          <div className="grid gap-0.5 text-xs font-bold text-[var(--muted)] sm:gap-1 sm:text-sm">
-            <Link className="inline-flex min-h-9 items-center transition hover:text-[var(--primary)] sm:min-h-11" href="/categories">
-              كل الفئات
-            </Link>
-            <Link className="inline-flex min-h-9 items-center transition hover:text-[var(--primary)] sm:min-h-11" href="/offers">
-              العروض
-            </Link>
-            <Link className="inline-flex min-h-9 items-center transition hover:text-[var(--primary)] sm:min-h-11" href="/cart">
-              السلة
-            </Link>
-            <Link className="inline-flex min-h-9 items-center transition hover:text-[var(--primary)] sm:min-h-11" href="/contact">
-              تواصل معنا
-            </Link>
+    <footer className="mt-4 border-t border-[var(--border)] bg-white/90">
+      <div className="container-shell py-4">
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex-1 min-w-0">
+            <LogoBrand />
+            <p className="mt-2 text-xs leading-6 text-[var(--muted)] truncate sm:text-sm">
+              روقان متجر عربي بسيط للمنتجات المنزلية والعصرية.
+            </p>
+          </div>
+
+          <div className="flex-shrink-0 text-sm text-[var(--muted)]">
+            <div className="font-black text-[var(--text)] mb-1">بيانات التواصل</div>
+            <div className="text-xs leading-6">
+              <div>واتساب: {storeConfig.whatsapp}</div>
+              <div>البريد: {storeConfig.email}</div>
+              <div>{storeConfig.address}</div>
+            </div>
           </div>
         </div>
-        <div>
-          <h3 className="mb-1.5 text-sm font-black text-[var(--text)] sm:mb-4 sm:text-base">
-            السياسات
-          </h3>
-          <div className="grid gap-0.5 text-xs font-bold text-[var(--muted)] sm:gap-1 sm:text-sm">
-            <Link className="inline-flex min-h-9 items-center transition hover:text-[var(--primary)] sm:min-h-11" href="/shipping-policy">
-              سياسة الشحن
+
+        <div className="mt-4 flex items-center justify-between">
+          <div className="text-xs font-bold text-[var(--muted)]">
+            <Link className="px-2 py-1 inline-block" href="/terms">
+              شروط الاستخدام
             </Link>
-            <Link className="inline-flex min-h-9 items-center transition hover:text-[var(--primary)] sm:min-h-11" href="/returns-policy">
-              الاستبدال والاسترجاع
-            </Link>
-            <Link className="inline-flex min-h-9 items-center transition hover:text-[var(--primary)] sm:min-h-11" href="/privacy-policy">
+            <Link className="px-2 py-1 inline-block" href="/privacy-policy">
               سياسة الخصوصية
             </Link>
-            <Link className="inline-flex min-h-9 items-center transition hover:text-[var(--primary)] sm:min-h-11" href="/terms">
-              الشروط والأحكام
-            </Link>
           </div>
+
+          <div className="text-xs font-bold text-[var(--muted)]">© 2026 روقان</div>
         </div>
-        <div>
-          <h3 className="mb-1.5 text-sm font-black text-[var(--text)] sm:mb-4 sm:text-base">
-            بيانات التواصل
-          </h3>
-          <div className="grid gap-1.5 text-xs leading-6 text-[var(--muted)] sm:gap-2 sm:text-sm sm:leading-7">
-            <span>واتساب: {storeConfig.whatsapp}</span>
-            <span>البريد: {storeConfig.email}</span>
-            <span>{storeConfig.address}</span>
-          </div>
-        </div>
-      </div>
-      <div className="border-t border-[var(--border)] py-4 text-center text-xs font-bold text-[var(--muted)]">
-        © 2026 روقان. جميع الحقوق محفوظة.
       </div>
     </footer>
   );

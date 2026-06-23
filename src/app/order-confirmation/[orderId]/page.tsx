@@ -27,16 +27,17 @@ export default async function OrderConfirmationPage({
     : `مرحبًا روقان، أريد متابعة الطلب رقم ${orderId}`;
 
   return (
-    <div className="container-shell section-y">
-      <section className="mx-auto max-w-2xl rounded-[24px] border border-[var(--border)] bg-white p-6 text-center shadow-soft sm:p-10">
+    <div className="container-shell section-y pb-6 sm:pb-10">
+      <section className="mx-auto w-full max-w-sm sm:max-w-2xl rounded-[24px] border border-[var(--border)] bg-white p-4 text-center shadow-soft sm:p-10">
         <div className="mx-auto grid size-16 place-items-center rounded-full bg-green-50 text-3xl">
           ✓
         </div>
         <p className="mt-5 text-sm font-black text-[var(--teal)]">
           تم استلام طلبك بنجاح
         </p>
-        <h1 className="mt-2 text-3xl font-black text-[var(--primary)]">
-          رقم الطلب: {orderId}
+        <h1 className="mt-2 text-2xl sm:text-3xl font-black text-[var(--primary)]">
+          <span className="block">رقم الطلب:</span>
+          <span className="order-code mt-2 inline-block text-lg sm:text-2xl">{orderId}</span>
         </h1>
         <p className="mt-4 text-sm leading-7 text-[var(--muted)] sm:text-base">
           سيتم تأكيد الطلب معك عبر الهاتف أو واتساب قبل الشحن. احتفظ برقم الطلب

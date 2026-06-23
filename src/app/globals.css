@@ -222,4 +222,18 @@ button:disabled {
 .product-badge--discount { background: rgba(17,155,181,0.92); color: white; }
 .product-badge--new { background: rgba(255,255,255,0.9); color: var(--primary); }
 
+/* Order confirmation specific styles */
+.order-code {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Ensure confirmation card doesn't overflow on very small screens */
+.order-confirm-card {
+  width: 100%;
+  max-width: 38rem;
+}
+
 
