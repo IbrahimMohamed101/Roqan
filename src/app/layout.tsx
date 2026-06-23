@@ -6,6 +6,7 @@ import { StoreHeader } from "@/components/store/StoreHeader";
 import MobileBottomNav from "@/components/ui/MobileBottomNav";
 import { getProducts } from "@/lib/catalog";
 import { storeConfig } from "@/lib/storeConfig";
+import { getStoreSettings } from "@/lib/storeSettings";
 import "./globals.css";
 
 const cairo = Cairo({
@@ -42,15 +43,15 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const products = await getProducts();
+  const [products, settings] = await Promise.all([getProducts(), getStoreSettings()]);
 
   return (
     <html dir="rtl" lang="ar">
       <body className={`${cairo.variable} antialiased`}>
         <CartProvider products={products}>
-          <StoreHeader />
+          <StoreHeader settings={settings} />
           <main className="pb-20 sm:pb-0">{children}</main>
-          <StoreFooter />
+          <StoreFooter settings={settings} />
           <MobileBottomNav />
         </CartProvider>
       </body>

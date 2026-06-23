@@ -51,7 +51,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const categoryProducts = await getProductsByCategory(category.slug);
 
   return (
-    <div className="container-shell section-y">
+    <div className="container-shell container-shell-wide section-y">
       <SectionHeader
         description={category.description}
         eyebrow={category.icon}

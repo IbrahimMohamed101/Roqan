@@ -21,7 +21,7 @@ export default async function CategoriesPage() {
   const categories = await getCategories();
 
   return (
-    <div className="container-shell section-y">
+    <div className="container-shell container-shell-wide section-y">
       <SectionHeader
         description="كل فئة مصممة لتسهيل وصولك للمنتج المناسب بسرعة."
         eyebrow="فئات المتجر"

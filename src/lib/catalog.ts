@@ -128,7 +128,9 @@ export const getCategories = async (includeInactive = false): Promise<Category[]
           c.is_active,
           count(p.id) as product_count
         from categories c
-        left join products p on p.category_id = c.id
+        left join products p
+          on p.category_id = c.id
+          and ($1::boolean = true or p.is_active = true)
         where ($1::boolean = true or c.is_active = true)
         group by c.id
         order by c.sort_order asc, c.name asc
@@ -167,7 +169,7 @@ export const getProducts = async (includeInactive = false): Promise<Product[]> =
           p.is_active
         from products p
         join categories c on c.id = p.category_id
-        where ($1::boolean = true or p.is_active = true)
+        where ($1::boolean = true or (p.is_active = true and c.is_active = true))
         order by p.created_at desc, p.id desc
       `,
       [includeInactive],

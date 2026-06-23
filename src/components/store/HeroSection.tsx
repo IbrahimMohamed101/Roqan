@@ -2,8 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { SearchBox } from "./SearchBox";
 import { TrustBadges } from "./TrustBadges";
+import type { StoreSettings } from "@/lib/storeSettings";
 
-export function HeroSection() {
+export function HeroSection({ settings }: { settings: StoreSettings }) {
   return (
     <section className="relative overflow-hidden rounded-[18px] border border-white bg-[linear-gradient(135deg,#E9F9FC_0%,#FFFFFF_48%,#FFF0E7_100%)] px-3 py-4 shadow-soft ring-1 ring-[var(--border)] sm:rounded-[28px] sm:p-8 lg:p-10">
       <div className="pointer-events-none absolute -left-20 top-8 hidden size-64 rounded-full bg-white/70 blur-3xl sm:block" />
@@ -11,7 +12,7 @@ export function HeroSection() {
       <div className="relative grid gap-5 lg:grid-cols-[minmax(0,1.14fr)_minmax(280px,0.86fr)] lg:items-center xl:gap-10">
         <div className="text-center lg:text-start">
           <p className="mb-2 inline-flex max-w-full rounded-full border border-white/80 bg-white/85 px-2.5 py-1 text-[11px] font-black leading-5 text-[var(--teal)] shadow-sm sm:mb-4 sm:px-4 sm:py-2 sm:text-sm">
-            روقان لكل بيت هادي ومنظم
+            {settings.storeName} لكل بيت هادي ومنظم
           </p>
           <h1 className="mx-auto max-w-3xl text-[1.2rem] font-black leading-[1.42] text-[var(--primary)] min-[390px]:text-[1.36rem] sm:text-5xl lg:mx-0 lg:text-[3.35rem] xl:text-6xl">
             منتجات منزلية وعصرية مختارة بعناية لتجربة شراء بسيطة ومريحة.
@@ -39,11 +40,12 @@ export function HeroSection() {
           <div className="rounded-[28px] border border-white bg-white/80 p-3 text-center shadow-soft backdrop-blur sm:p-4">
             <div className="relative overflow-hidden rounded-[22px] bg-[var(--soft-surface)]">
               <Image
-                alt="شعار روقان"
+                alt={`شعار ${settings.storeName}`}
                 className="mx-auto aspect-[4/3] h-auto w-full object-cover"
                 height={360}
                 priority
-                src="/rooqan-logo.jpeg"
+                src={settings.storeLogoUrl}
+                unoptimized={settings.storeLogoUrl.startsWith("http")}
                 width={520}
               />
               <div className="absolute inset-x-3 bottom-3 rounded-2xl bg-white/90 px-3 py-2 text-xs font-black leading-5 text-[var(--primary)] shadow-sm backdrop-blur sm:inset-x-4 sm:bottom-4 sm:px-4 sm:py-3 sm:text-sm">

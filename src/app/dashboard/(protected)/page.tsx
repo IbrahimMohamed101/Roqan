@@ -3,6 +3,7 @@ import { Notice } from "@/components/dashboard/Notice";
 import { SubmitButton } from "@/components/dashboard/SubmitButton";
 import { getOrders, buildWhatsAppOrderMessage } from "@/lib/orders";
 import { createWhatsAppUrl, formatPrice } from "@/lib/storeConfig";
+import { getStoreSettings } from "@/lib/storeSettings";
 import type { OrderStatus } from "@/types/order";
 
 const statusLabels = {
@@ -56,11 +57,10 @@ export default async function DashboardOrdersPage({
     ? String(params.status)
     : "all";
   const page = Math.max(Number(params.page ?? 1) || 1, 1);
-  const { orders, total, totalPages } = await getOrders({
-    page,
-    query,
-    status: status as OrderStatus | "all",
-  });
+  const [{ orders, total, totalPages }, settings] = await Promise.all([
+    getOrders({ page, query, status: status as OrderStatus | "all" }),
+    getStoreSettings(),
+  ]);
   const currentPath = getPageHref({ page, query, status });
 
   return (
@@ -195,7 +195,7 @@ export default async function DashboardOrdersPage({
                 </form>
                 <a
                   className="btn-primary min-h-11 px-4"
-                  href={createWhatsAppUrl(buildWhatsAppOrderMessage(order))}
+                  href={createWhatsAppUrl(buildWhatsAppOrderMessage(order, settings.storeName), settings.whatsappNumber)}
                   rel="noreferrer"
                   target="_blank"
                 >

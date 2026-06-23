@@ -22,7 +22,7 @@ export default async function OffersPage() {
   const offerProducts = products.filter((product) => product.discount);
 
   return (
-    <div className="container-shell section-y">
+    <div className="container-shell container-shell-wide section-y">
       <SectionHeader
         description="منتجات عليها خصومات حقيقية وأسعار مناسبة للبيت المصري."
         eyebrow="خصومات مختارة"

@@ -14,6 +14,7 @@ import {
   getProductsByCategory,
 } from "@/lib/catalog";
 import { createWhatsAppUrl, storeConfig } from "@/lib/storeConfig";
+import { getStoreSettings } from "@/lib/storeSettings";
 
 type ProductPageProps = {
   params: Promise<{ slug: string }>;
@@ -56,8 +57,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
     notFound();
   }
 
-  const category = await getCategoryBySlug(product.categorySlug);
-  const relatedProducts = (await getProductsByCategory(product.categorySlug))
+  const [category, categoryProducts, settings] = await Promise.all([
+    getCategoryBySlug(product.categorySlug),
+    getProductsByCategory(product.categorySlug),
+    getStoreSettings(),
+  ]);
+  const relatedProducts = categoryProducts
     .filter((item) => item.slug !== product.slug)
     .slice(0, 4);
   const productJsonLd = {
@@ -135,7 +140,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </div>
           <a
             className="btn-secondary mt-3 w-full"
-            href={createWhatsAppUrl(`مرحبًا روقان، أريد طلب ${product.name}`)}
+            href={createWhatsAppUrl(`مرحبًا ${settings.storeName}، أريد طلب ${product.name}`, settings.whatsappNumber) || undefined}
             rel="noreferrer"
             target="_blank"
           >

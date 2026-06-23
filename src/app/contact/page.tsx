@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { createWhatsAppUrl, storeConfig } from "@/lib/storeConfig";
+import { createWhatsAppUrl } from "@/lib/storeConfig";
+import { getStoreSettings } from "@/lib/storeSettings";
 
 export const metadata: Metadata = {
   title: "تواصل معنا | روقان",
@@ -15,7 +16,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const settings = await getStoreSettings();
+  const whatsappUrl = createWhatsAppUrl(
+    `مرحبًا ${settings.storeName}، أريد الاستفسار عن منتج.`,
+    settings.whatsappNumber,
+  );
   return (
     <div className="container-shell section-y">
       <section className="grid gap-5 lg:grid-cols-[1fr_0.85fr] lg:items-start">
@@ -30,19 +36,20 @@ export default function ContactPage() {
           </p>
           <a
             className="btn-primary mt-6"
-            href={createWhatsAppUrl("مرحبًا روقان، أريد الاستفسار عن منتج.")}
+            href={whatsappUrl || undefined}
             rel="noreferrer"
             target="_blank"
           >
-            تواصل عبر واتساب
+            {whatsappUrl ? "تواصل عبر واتساب" : "واتساب غير متاح حاليًا"}
           </a>
         </div>
         <div className="rounded-[28px] border border-[rgba(17,155,181,0.2)] bg-[var(--light-cyan)] p-6 shadow-soft sm:p-8">
-          <h2 className="text-xl font-black text-[var(--text)]">بيانات روقان</h2>
+          <h2 className="text-xl font-black text-[var(--text)]">بيانات {settings.storeName}</h2>
           <div className="mt-5 grid gap-4 text-sm font-bold leading-7 text-[var(--muted)]">
-            <div className="rounded-2xl bg-white p-4 shadow-sm">واتساب: {storeConfig.whatsapp}</div>
-            <div className="rounded-2xl bg-white p-4 shadow-sm">البريد: {storeConfig.email}</div>
-            <div className="rounded-2xl bg-white p-4 shadow-sm">العنوان: {storeConfig.address}</div>
+            <div className="rounded-2xl bg-white p-4 shadow-sm">واتساب: {settings.whatsappNumber}</div>
+            {settings.phoneNumber ? <div className="rounded-2xl bg-white p-4 shadow-sm">الهاتف: {settings.phoneNumber}</div> : null}
+            {settings.email ? <div className="rounded-2xl bg-white p-4 shadow-sm">البريد: {settings.email}</div> : null}
+            <div className="rounded-2xl bg-white p-4 shadow-sm">العنوان: {settings.location}{settings.address ? ` · ${settings.address}` : ""}</div>
             <div className="rounded-2xl bg-white p-4 shadow-sm">
               مواعيد الرد: يوميًا من 10 صباحًا إلى 10 مساءً
             </div>

@@ -20,6 +20,14 @@ export function WhatsAppOrderButton({
     }
   }, [orderId]);
 
+  if (!href) {
+    return (
+      <span className="btn-secondary cursor-not-allowed opacity-60" title="رقم واتساب غير متاح حاليًا">
+        واتساب غير متاح حاليًا
+      </span>
+    );
+  }
+
   return (
     <a className="btn-primary" href={href} rel="noreferrer" target="_blank">
       إرسال ملخص واتساب

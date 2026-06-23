@@ -23,7 +23,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   const results = await searchProducts(query);
 
   return (
-    <div className="container-shell section-y">
+    <div className="container-shell container-shell-wide section-y">
       <SectionHeader
         description="اكتب اسم المنتج أو الفئة، وسنعرض لك النتائج من بيانات المتجر الحالية."
         eyebrow="بحث المنتجات"

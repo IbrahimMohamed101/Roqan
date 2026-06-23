@@ -3,6 +3,7 @@ import Link from "next/link";
 import { WhatsAppOrderButton } from "@/components/store/WhatsAppOrderButton";
 import { buildWhatsAppOrderMessage, getOrderByPublicId } from "@/lib/orders";
 import { createWhatsAppUrl, formatPrice } from "@/lib/storeConfig";
+import { getStoreSettings } from "@/lib/storeSettings";
 
 type OrderConfirmationProps = {
   params: Promise<{ orderId: string }>;
@@ -21,10 +22,13 @@ export default async function OrderConfirmationPage({
   params,
 }: OrderConfirmationProps) {
   const { orderId } = await params;
-  const order = await getOrderByPublicId(orderId);
+  const [order, settings] = await Promise.all([
+    getOrderByPublicId(orderId),
+    getStoreSettings(),
+  ]);
   const message = order
-    ? buildWhatsAppOrderMessage(order)
-    : `مرحبًا روقان، أريد متابعة الطلب رقم ${orderId}`;
+    ? buildWhatsAppOrderMessage(order, settings.storeName)
+    : `مرحبًا ${settings.storeName}، أريد متابعة الطلب رقم ${orderId}`;
 
   return (
     <div className="container-shell section-y pb-6 sm:pb-10">
@@ -75,7 +79,7 @@ export default async function OrderConfirmationPage({
         </p>
         <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
           <WhatsAppOrderButton
-            fallbackUrl={createWhatsAppUrl(message)}
+            fallbackUrl={createWhatsAppUrl(message, settings.whatsappNumber)}
             orderId={orderId}
           />
           <Link className="btn-secondary" href="/">

@@ -143,7 +143,7 @@ const normalizeCheckoutItems = (payload: CheckoutPayload) => {
     }));
 };
 
-export const buildWhatsAppOrderMessage = (order: OrderRecord) => {
+export const buildWhatsAppOrderMessage = (order: OrderRecord, storeName = "روقان") => {
   const items = order.items
     .map(
       (item) =>
@@ -152,7 +152,7 @@ export const buildWhatsAppOrderMessage = (order: OrderRecord) => {
     .join("\n");
 
   return [
-    "مرحبًا روقان، أريد تأكيد هذا الطلب:",
+    `مرحبًا ${storeName}، أريد تأكيد هذا الطلب:`,
     `رقم الطلب: ${order.publicId}`,
     `الاسم: ${order.customerName}`,
     `الهاتف: ${order.customerPhone}`,

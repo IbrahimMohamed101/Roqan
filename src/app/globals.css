@@ -75,6 +75,11 @@ button:disabled {
   width: 100%;
 }
 
+.container-shell.container-shell-wide {
+  max-width: 1440px;
+  padding-inline: 16px;
+}
+
 .section-y {
   padding-block: 36px;
 }
@@ -169,6 +174,18 @@ button:disabled {
   }
 }
 
+@media (min-width: 640px) {
+  .container-shell.container-shell-wide {
+    padding-inline: 24px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-shell.container-shell-wide {
+    padding-inline: 32px;
+  }
+}
+
 /* Category chips horizontal bar */
 .category-chips {
   -webkit-overflow-scrolling: touch;
@@ -235,5 +252,4 @@ button:disabled {
   width: 100%;
   max-width: 38rem;
 }
-
 

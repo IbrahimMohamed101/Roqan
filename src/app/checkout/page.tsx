@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CheckoutForm } from "@/components/store/CheckoutForm";
 import { OrderSummary } from "@/components/store/OrderSummary";
+import { getStoreSettings } from "@/lib/storeSettings";
 
 export const metadata: Metadata = {
   title: "إتمام الطلب | روقان",
@@ -11,7 +12,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function CheckoutPage() {
+export default async function CheckoutPage() {
+  const settings = await getStoreSettings();
   return (
     <div>
       <div className="bg-[linear-gradient(135deg,#119b7d_0%,#0f8f76_100%)] py-2.5 text-center text-xs font-black text-white sm:py-3 sm:text-sm">
@@ -29,7 +31,7 @@ export default function CheckoutPage() {
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_390px] lg:items-start">
           <CheckoutForm />
           <div className="grid gap-4 self-start">
-            <OrderSummary checkoutFormId="checkout-form" showConfirmButton />
+            <OrderSummary checkoutFormId="checkout-form" showConfirmButton termsUrl={settings.termsUrl} />
           <div className="rounded-[22px] border border-[var(--border)] bg-white p-4 text-xs font-bold leading-6 text-[var(--muted)] shadow-soft">
             بإرسال الطلب، سيتم التواصل معك لتأكيد البيانات قبل الشحن. يمكنك
             مراجعة{" "}

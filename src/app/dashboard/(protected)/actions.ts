@@ -6,6 +6,12 @@ import { isAdminAuthenticated } from "@/lib/adminAuth";
 import { isUploadedImageFile, uploadProductImage } from "@/lib/cloudinary";
 import { hasDatabaseUrl, query } from "@/lib/db";
 import type { OrderStatus } from "@/types/order";
+import {
+  defaultStoreSettings,
+  storeSettingEntries,
+  type StoreSettings,
+} from "@/lib/storeSettings";
+import { normalizeWhatsAppNumber } from "@/lib/storeConfig";
 
 const boolFromForm = (formData: FormData, key: string) => formData.get(key) === "on";
 const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
@@ -39,7 +45,7 @@ const requireDatabase = () => {
 };
 
 const dashboardPathPattern =
-  /^\/dashboard(?:\/(?:products|categories))?(?:\?[A-Za-z0-9%=&_.~+\-]*)?$/;
+  /^\/dashboard(?:\/(?:products|categories|settings))?(?:\?[A-Za-z0-9%=&_.~+\-]*)?$/;
 
 const getReturnTo = (formData: FormData, fallback: string) => {
   const value = String(formData.get("returnTo") ?? "");
@@ -78,6 +84,20 @@ const validateHttpsUrl = (value: string) => {
     throw new Error("رابط الصورة يجب أن يكون رابط HTTPS صحيحًا.");
   }
 };
+
+const validateOptionalUrl = (value: string, label: string, allowInternal = false) => {
+  if (!value || (allowInternal && value.startsWith("/"))) return;
+
+  try {
+    const url = new URL(value);
+    if (url.protocol !== "https:") throw new Error();
+  } catch {
+    throw new Error(`${label} يجب أن يكون رابط HTTPS صحيحًا${allowInternal ? " أو مسارًا داخليًا يبدأ بـ /" : ""}.`);
+  }
+};
+
+const textFromForm = (formData: FormData, key: string) =>
+  String(formData.get(key) ?? "").trim();
 
 export const saveCategory = async (formData: FormData) => {
   const returnTo = getReturnTo(formData, "/dashboard/categories");
@@ -320,4 +340,65 @@ export const updateOrderStatus = async (formData: FormData) => {
   }
 
   redirect(withNotice(returnTo, "success", "تم تحديث حالة الطلب."));
+};
+
+export const saveStoreSettings = async (formData: FormData) => {
+  const returnTo = "/dashboard/settings";
+
+  try {
+    await requireAdmin();
+    requireDatabase();
+
+    const uploadedLogo = formData.get("storeLogoFile");
+    let storeLogoUrl = textFromForm(formData, "storeLogoUrl");
+    if (isUploadedImageFile(uploadedLogo)) {
+      storeLogoUrl = await uploadProductImage(uploadedLogo);
+    }
+
+    const settings: StoreSettings = {
+      storeName: textFromForm(formData, "storeName"),
+      storeDescription: textFromForm(formData, "storeDescription"),
+      storeLogoUrl: storeLogoUrl || defaultStoreSettings.storeLogoUrl,
+      whatsappNumber: normalizeWhatsAppNumber(textFromForm(formData, "whatsappNumber")),
+      phoneNumber: textFromForm(formData, "phoneNumber"),
+      email: textFromForm(formData, "email").toLowerCase(),
+      location: textFromForm(formData, "location"),
+      address: textFromForm(formData, "address"),
+      termsUrl: textFromForm(formData, "termsUrl") || defaultStoreSettings.termsUrl,
+      privacyUrl: textFromForm(formData, "privacyUrl") || defaultStoreSettings.privacyUrl,
+      facebookUrl: textFromForm(formData, "facebookUrl"),
+      instagramUrl: textFromForm(formData, "instagramUrl"),
+      tiktokUrl: textFromForm(formData, "tiktokUrl"),
+    };
+
+    if (!settings.storeName) throw new Error("اسم المتجر مطلوب.");
+    if (settings.whatsappNumber.length < 10) throw new Error("رقم واتساب مطلوب ويجب أن يكون صحيحًا مع كود الدولة.");
+    if (settings.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(settings.email)) {
+      throw new Error("البريد الإلكتروني غير صحيح.");
+    }
+    validateOptionalUrl(settings.storeLogoUrl, "رابط الشعار", settings.storeLogoUrl.startsWith("/"));
+    validateOptionalUrl(settings.termsUrl, "رابط الشروط", true);
+    validateOptionalUrl(settings.privacyUrl, "رابط الخصوصية", true);
+    validateOptionalUrl(settings.facebookUrl, "رابط فيسبوك");
+    validateOptionalUrl(settings.instagramUrl, "رابط إنستجرام");
+    validateOptionalUrl(settings.tiktokUrl, "رابط تيك توك");
+
+    const entries = storeSettingEntries(settings);
+    await query(
+      `
+        insert into store_settings (key, value, updated_at)
+        select entry.key, entry.value, now()
+        from unnest($1::text[], $2::text[]) as entry(key, value)
+        on conflict (key) do update set value = excluded.value, updated_at = now()
+      `,
+      [entries.map(([key]) => key), entries.map(([, value]) => value)],
+    );
+
+    revalidatePath("/", "layout");
+    revalidatePath("/dashboard/settings");
+  } catch (error) {
+    redirect(withNotice(returnTo, "error", getErrorMessage(error)));
+  }
+
+  redirect(withNotice(returnTo, "success", "تم حفظ إعدادات المتجر بنجاح."));
 };

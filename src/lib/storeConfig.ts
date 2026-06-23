@@ -18,5 +18,11 @@ export const formatPrice = (value: number) =>
     maximumFractionDigits: 0,
   }).format(value);
 
-export const createWhatsAppUrl = (message: string) =>
-  `https://wa.me/${storeConfig.whatsapp}?text=${encodeURIComponent(message)}`;
+export const normalizeWhatsAppNumber = (value: string) => value.replace(/\D/g, "");
+
+export const createWhatsAppUrl = (message: string, number = storeConfig.whatsapp) => {
+  const normalizedNumber = normalizeWhatsAppNumber(number);
+  return normalizedNumber
+    ? `https://wa.me/${normalizedNumber}?text=${encodeURIComponent(message)}`
+    : "";
+};

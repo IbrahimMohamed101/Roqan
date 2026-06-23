@@ -9,12 +9,14 @@ type OrderSummaryProps = {
   checkoutFormId?: string;
   showConfirmButton?: boolean;
   showCheckoutButton?: boolean;
+  termsUrl?: string;
 };
 
 export function OrderSummary({
   checkoutFormId,
   showCheckoutButton,
   showConfirmButton,
+  termsUrl = "/terms",
 }: OrderSummaryProps) {
   const { items, subtotal, totalItems } = useCart();
   const shipping = subtotal > 0 ? SHIPPING_FEE : 0;
@@ -93,7 +95,7 @@ export function OrderSummary({
           </button>
           <p className="mt-3 text-center text-xs font-bold leading-6 text-[var(--muted)]">
             بالضغط على تأكيد الطلب، أنت توافق على{" "}
-            <Link className="text-[var(--primary)]" href="/terms">
+            <Link className="text-[var(--primary)]" href={termsUrl}>
               الشروط والأحكام
             </Link>
           </p>

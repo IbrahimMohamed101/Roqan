@@ -7,6 +7,7 @@ const links = [
   { href: "/dashboard", label: "الطلبات" },
   { href: "/dashboard/products", label: "المنتجات" },
   { href: "/dashboard/categories", label: "الفئات" },
+  { href: "/dashboard/settings", label: "إعدادات المتجر" },
 ];
 
 export function DashboardNav() {

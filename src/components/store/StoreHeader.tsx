@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 import { LogoBrand } from "./LogoBrand";
 import { SearchBox } from "./SearchBox";
+import type { StoreSettings } from "@/lib/storeSettings";
 
 const navLinks = [
   { href: "/categories", label: "الفئات" },
@@ -11,15 +12,19 @@ const navLinks = [
   { href: "/contact", label: "تواصل معنا" },
 ];
 
-export function StoreHeader() {
+export function StoreHeader({ settings }: { settings: StoreSettings }) {
   const { totalItems } = useCart();
 
   return (
     <header className="sticky top-0 z-40 border-b border-[var(--border)] bg-white/90 backdrop-blur-xl">
-      <div className="container-shell py-1.5 sm:py-4">
+      <div className="container-shell container-shell-wide py-1.5 sm:py-4">
         <div className="grid gap-1.5 sm:gap-3 xl:grid-cols-[auto_minmax(0,1fr)_minmax(280px,420px)_auto] xl:items-center">
           <div className="flex min-w-0 items-center justify-between gap-2">
-            <LogoBrand />
+            <LogoBrand
+              description={settings.storeDescription}
+              logoUrl={settings.storeLogoUrl}
+              name={settings.storeName}
+            />
             <Link
               className="btn-secondary !min-h-8 shrink-0 rounded-[13px] !px-2.5 !py-1 text-[11px] sm:!min-h-11 sm:!px-4 sm:!py-2 sm:text-sm xl:!hidden"
               href="/cart"

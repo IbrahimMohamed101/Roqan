@@ -16,8 +16,8 @@ export function CategoryChips({
   if (categories.length === 0) return null;
 
   return (
-    <div className="category-chips -mx-2 overflow-x-auto pb-1">
-      <div className="flex gap-3 px-2">
+    <div className="category-chips -mx-2 overflow-x-auto pb-1 lg:overflow-visible">
+      <div className="flex gap-3 px-2 lg:flex-wrap">
         <button
           onClick={() => onSelect?.(null)}
           aria-pressed={!selected}

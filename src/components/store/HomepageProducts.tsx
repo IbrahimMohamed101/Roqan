@@ -28,7 +28,7 @@ export default function HomepageProducts({
     <div>
       <CategoryChips categories={categories} selected={selected} onSelect={setSelected} />
 
-      <div className="mt-3 grid grid-cols-1 gap-3 min-[390px]:grid-cols-2 sm:gap-4 lg:grid-cols-4">
+      <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4 lg:gap-5">
         {displayed.length === 0 ? (
           <div className="rounded-[24px] border border-[var(--border)] bg-white p-6 text-center text-sm font-bold leading-7 text-[var(--muted)] shadow-soft">
             <p>لا توجد منتجات في هذا التصنيف حالياً</p>
