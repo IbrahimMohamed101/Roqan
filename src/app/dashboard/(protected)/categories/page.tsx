@@ -59,6 +59,11 @@ export default async function DashboardCategoriesPage({
         <input name="returnTo" type="hidden" value={currentPath} />
         <input className={inputClass} name="name" placeholder="اسم الفئة" required />
         <input className={inputClass} name="slug" placeholder="slug" required />
+        <input className={inputClass} name="imageUrl" placeholder="رابط صورة الخلفية (اختياري)" />
+        <label className="flex items-center gap-2 text-sm font-bold">
+          رفع صورة خلفية
+          <input className="ml-2" name="imageFile" type="file" accept="image/*" />
+        </label>
         <input className={inputClass} name="icon" placeholder="الأيقونة" />
         <input className={inputClass} name="sortOrder" placeholder="الترتيب" type="number" />
         <label className="flex items-center gap-2 text-sm font-bold">
@@ -106,7 +111,12 @@ export default async function DashboardCategoriesPage({
             <input name="id" type="hidden" value={category.id} />
             <input className={inputClass} defaultValue={category.name} name="name" required />
             <input className={inputClass} defaultValue={category.slug} name="slug" required />
-            <input className={inputClass} defaultValue={category.icon} name="icon" />
+              <input className={inputClass} defaultValue={category.icon} name="icon" />
+              <input className={inputClass} defaultValue={category.image ?? ""} name="imageUrl" placeholder="رابط صورة الخلفية (اختياري)" />
+              <label className="flex items-center gap-2 text-sm font-bold">
+                رفع صورة خلفية
+                <input className="ml-2" name="imageFile" type="file" accept="image/*" />
+              </label>
             <input className={inputClass} defaultValue={category.sortOrder ?? index} name="sortOrder" type="number" />
             <label className="flex items-center gap-2 text-sm font-bold">
               <input defaultChecked={category.isActive !== false} name="isActive" type="checkbox" /> نشطة

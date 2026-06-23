@@ -11,7 +11,7 @@ export function CategoryGrid({ categories }: { categories: Category[] }) {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-2.5 min-[390px]:grid-cols-2 sm:gap-4 lg:grid-cols-4">
+    <div className="grid grid-cols-1 gap-4 min-[390px]:grid-cols-2 sm:gap-6 lg:grid-cols-4">
       {categories.map((category) => (
         <CategoryCard category={category} key={category.slug} />
       ))}

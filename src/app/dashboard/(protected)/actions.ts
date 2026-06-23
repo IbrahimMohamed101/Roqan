@@ -95,6 +95,14 @@ export const saveCategory = async (formData: FormData) => {
     }
     validateSlug(slug);
 
+    const uploadedImage = formData.get("imageFile");
+    let imageUrl = String(formData.get("imageUrl") ?? "").trim();
+    if (isUploadedImageFile(uploadedImage)) {
+      imageUrl = await uploadProductImage(uploadedImage);
+    }
+
+    if (imageUrl) validateHttpsUrl(imageUrl);
+
     const values = [
       slug,
       name,
@@ -102,22 +110,23 @@ export const saveCategory = async (formData: FormData) => {
       String(formData.get("description") ?? "").trim(),
       Number(formData.get("sortOrder") ?? 0),
       boolFromForm(formData, "isActive"),
+      imageUrl || null,
     ];
 
     if (id) {
       await query(
         `
           update categories
-          set slug = $1, name = $2, icon = $3, description = $4, sort_order = $5, is_active = $6, updated_at = now()
-          where id = $7
+          set slug = $1, name = $2, icon = $3, description = $4, sort_order = $5, is_active = $6, image_url = $7, updated_at = now()
+          where id = $8
         `,
         [...values, Number(id)],
       );
     } else {
       await query(
         `
-          insert into categories (slug, name, icon, description, sort_order, is_active)
-          values ($1, $2, $3, $4, $5, $6)
+          insert into categories (slug, name, icon, description, sort_order, is_active, image_url)
+          values ($1, $2, $3, $4, $5, $6, $7)
         `,
         values,
       );

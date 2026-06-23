@@ -10,6 +10,7 @@ type CategoryRow = {
   slug: string;
   name: string;
   icon: string | null;
+  image_url?: string | null;
   description: string | null;
   product_count: string;
   sort_order?: number;
@@ -37,6 +38,7 @@ const mapCategory = (row: CategoryRow): Category => ({
   slug: row.slug,
   name: row.name,
   icon: row.icon ?? "•",
+  image: row.image_url ?? undefined,
   description: row.description ?? "",
   productCount: Number(row.product_count),
   sortOrder: row.sort_order,
@@ -107,6 +109,12 @@ export const getCategories = async (includeInactive = false): Promise<Category[]
   }
 
   try {
+    // Check if image_url column exists (migration might not be applied yet)
+    const colCheck = await query<{ column_name: string }>(
+      `select column_name from information_schema.columns where table_name = 'categories' and column_name = 'image_url' limit 1`
+    );
+    const selectImage = colCheck.rows.length > 0 ? "c.image_url," : "";
+
     const result = await query<CategoryRow>(
       `
         select
@@ -114,6 +122,7 @@ export const getCategories = async (includeInactive = false): Promise<Category[]
           c.slug,
           c.name,
           c.icon,
+          ${selectImage}
           c.description,
           c.sort_order,
           c.is_active,
