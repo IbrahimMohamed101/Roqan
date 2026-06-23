@@ -7,6 +7,9 @@ import { getCategories } from "@/lib/catalog";
 const inputClass =
   "min-h-11 w-full rounded-2xl border border-[var(--border)] bg-white px-3 py-2 text-sm font-semibold text-[var(--text)] outline-none transition focus:border-[var(--teal)] focus:ring-4 focus:ring-[var(--ring)]";
 
+const categorySaveErrorMessage =
+  "تعذر حفظ الفئة. تأكد من تحديث قاعدة البيانات وإعدادات الاتصال.";
+
 const CategoryField = ({
   children,
   label,
@@ -42,6 +45,7 @@ export default async function DashboardCategoriesPage({
 }: DashboardCategoriesPageProps) {
   const params = await searchParams;
   const query = String(params.q ?? "").trim().toLowerCase();
+  const errorMessage = params.error ? categorySaveErrorMessage : undefined;
   const categories = await getCategories(true);
   const filteredCategories = categories.filter(
     (category) =>
@@ -58,7 +62,7 @@ export default async function DashboardCategoriesPage({
         <h1 className="mt-1 text-3xl font-black text-[var(--text)]">الفئات</h1>
       </div>
       <Notice message={params.success} />
-      <Notice message={params.error} type="error" />
+      <Notice message={errorMessage} type="error" />
 
       <form className="mb-5 grid gap-3 rounded-[24px] border border-[var(--border)] bg-white p-4 shadow-soft sm:grid-cols-[1fr_auto]" method="get">
         <input className={inputClass} defaultValue={query} name="q" placeholder="بحث باسم الفئة أو slug" />

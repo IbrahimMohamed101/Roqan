@@ -197,7 +197,8 @@ export const saveCategory = async (formData: FormData) => {
     revalidatePath("/");
     revalidatePath("/dashboard/categories");
   } catch (error) {
-    redirect(withNotice(returnTo, "error", getErrorMessage(error)));
+    console.error("Category save failed.", error);
+    redirect(withNotice(returnTo, "error", "category_save_failed"));
   }
 
   redirect(withNotice(returnTo, "success", "تم حفظ الفئة بنجاح."));
