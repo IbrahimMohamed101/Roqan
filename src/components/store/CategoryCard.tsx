@@ -20,10 +20,13 @@ export function CategoryCard({ category }: { category: Category }) {
             sizes="(min-width:1024px) 25vw, (min-width:640px) 33vw, 100vw"
           />
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-tr from-[rgba(17,24,39,0.08)] to-[rgba(6,95,70,0.04)]" />
+          <div className="absolute inset-0 overflow-hidden bg-[linear-gradient(135deg,#123f6d_0%,#119bb5_62%,#68c7d4_100%)]">
+            <span className="absolute -left-8 -top-10 size-36 rounded-full bg-white/15 blur-sm" />
+            <span className="absolute -bottom-16 -right-10 size-44 rounded-full bg-[var(--coral)]/25 blur-md" />
+          </div>
         )}
 
-        <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/30 to-transparent" />
+        <div className={`absolute inset-0 ${hasImage ? "bg-gradient-to-t from-black/55 via-black/30 to-transparent" : "bg-gradient-to-t from-[rgba(11,43,77,0.72)] via-transparent to-white/5"}`} />
 
         <div className="absolute inset-0 flex flex-col justify-end p-4 text-right">
           <h3 className="text-lg font-black leading-6 text-white drop-shadow-sm">{category.name}</h3>

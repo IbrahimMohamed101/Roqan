@@ -38,11 +38,11 @@ export default function CartPage() {
           تفريغ السلة
         </button>
       </div>
-      <div className="grid gap-5 lg:grid-cols-[1fr_360px]">
-        <div className="grid gap-3">
+      <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_360px]">
+        <div className="grid content-start gap-3">
           {items.map((item) => (
             <article
-              className="grid grid-cols-[78px_minmax(0,1fr)] gap-3 rounded-[18px] border border-[var(--border)] bg-white p-3 shadow-soft transition hover:border-[rgba(17,155,181,0.45)] min-[390px]:grid-cols-[92px_minmax(0,1fr)] sm:grid-cols-[120px_1fr_auto] sm:rounded-[24px] sm:gap-4 sm:p-4"
+              className="grid grid-cols-[78px_minmax(0,1fr)] gap-3 rounded-[18px] border border-[var(--border)] bg-white p-3 shadow-soft transition hover:border-[rgba(17,155,181,0.45)] min-[390px]:grid-cols-[92px_minmax(0,1fr)] sm:grid-cols-[104px_minmax(0,1fr)_auto] sm:items-center sm:rounded-[24px] sm:gap-4 sm:p-4"
               key={item.product.slug}
             >
               <Link

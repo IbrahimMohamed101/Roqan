@@ -47,10 +47,10 @@ export default async function RootLayout({
 
   return (
     <html dir="rtl" lang="ar">
-      <body className={`${cairo.variable} antialiased`}>
+      <body className={`${cairo.variable} flex min-h-screen flex-col antialiased`}>
         <CartProvider products={products}>
           <StoreHeader settings={settings} />
-          <main className="pb-20 sm:pb-0">{children}</main>
+          <main className="flex-1">{children}</main>
           <StoreFooter settings={settings} />
           <MobileBottomNav />
         </CartProvider>
