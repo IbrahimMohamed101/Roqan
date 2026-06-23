@@ -168,3 +168,58 @@ button:disabled {
     padding-inline: 12px;
   }
 }
+
+/* Category chips horizontal bar */
+.category-chips {
+  -webkit-overflow-scrolling: touch;
+}
+.category-chips .chip {
+  background: white;
+  border: 1px solid var(--border);
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-weight: 900;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.category-chips .chip { min-height: 40px; }
+.category-chips .chip:focus { outline: none; }
+.category-chips .chip--active {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: white;
+  border-color: transparent;
+}
+.category-chips .chip:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 3px;
+}
+
+/* hide native scrollbar */
+.category-chips::-webkit-scrollbar { display: none; }
+.category-chips { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* mobile bottom nav styling */
+.mobile-bottom-nav .nav-item {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  padding: 6px 8px;
+  border-radius: 8px;
+}
+.mobile-bottom-nav .nav-item svg { display: block; }
+.mobile-bottom-nav .nav-item.active { color: var(--primary); }
+.mobile-bottom-nav { bottom: 12px; }
+
+/* ensure mobile nav respects safe-area */
+.mobile-bottom-nav > div { padding-bottom: calc(env(safe-area-inset-bottom) + 8px); }
+
+/* product card badge sizing tweaks */
+.product-badge { font-size: 11px; padding: 4px 8px; border-radius: 999px; }
+.product-badge--discount { background: rgba(17,155,181,0.92); color: white; }
+.product-badge--new { background: rgba(255,255,255,0.9); color: var(--primary); }
+
+

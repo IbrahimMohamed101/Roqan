@@ -3,6 +3,7 @@ import { Cairo } from "next/font/google";
 import { CartProvider } from "@/context/CartContext";
 import { StoreFooter } from "@/components/store/StoreFooter";
 import { StoreHeader } from "@/components/store/StoreHeader";
+import MobileBottomNav from "@/components/ui/MobileBottomNav";
 import { getProducts } from "@/lib/catalog";
 import { storeConfig } from "@/lib/storeConfig";
 import "./globals.css";
@@ -48,8 +49,9 @@ export default async function RootLayout({
       <body className={`${cairo.variable} antialiased`}>
         <CartProvider products={products}>
           <StoreHeader />
-          <main>{children}</main>
+          <main className="pb-20 sm:pb-0">{children}</main>
           <StoreFooter />
+          <MobileBottomNav />
         </CartProvider>
       </body>
     </html>
