@@ -4,6 +4,7 @@ create table if not exists categories (
   name text not null,
   icon text default '•',
   description text default '',
+  image_url text,
   sort_order integer not null default 0,
   is_active boolean not null default true,
   created_at timestamptz not null default now(),

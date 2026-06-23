@@ -7,6 +7,21 @@ import { getCategories } from "@/lib/catalog";
 const inputClass =
   "min-h-11 w-full rounded-2xl border border-[var(--border)] bg-white px-3 py-2 text-sm font-semibold text-[var(--text)] outline-none transition focus:border-[var(--teal)] focus:ring-4 focus:ring-[var(--ring)]";
 
+const CategoryField = ({
+  children,
+  label,
+  className = "",
+}: {
+  children: React.ReactNode;
+  label: string;
+  className?: string;
+}) => (
+  <label className={`grid min-w-0 gap-2 text-sm font-black text-[var(--text)] ${className}`}>
+    {label}
+    {children}
+  </label>
+);
+
 type DashboardCategoriesPageProps = {
   searchParams: Promise<{
     q?: string;
@@ -54,24 +69,32 @@ export default async function DashboardCategoriesPage({
 
       <form
         action={saveCategory}
-        className="mb-5 grid gap-3 rounded-[24px] border border-[var(--border)] bg-white p-5 shadow-soft lg:grid-cols-5"
+        className="mb-5 grid gap-4 rounded-[24px] border border-[var(--border)] bg-white p-5 shadow-soft md:grid-cols-2 lg:grid-cols-3"
       >
         <input name="returnTo" type="hidden" value={currentPath} />
-        <input className={inputClass} name="name" placeholder="اسم الفئة" required />
-        <input className={inputClass} name="slug" placeholder="slug" required />
-        <input className={inputClass} name="imageUrl" placeholder="رابط صورة الخلفية (اختياري)" />
-        <label className="flex items-center gap-2 text-sm font-bold">
-          رفع صورة خلفية
-          <input className="ml-2" name="imageFile" type="file" accept="image/*" />
-        </label>
-        <input className={inputClass} name="icon" placeholder="الأيقونة" />
-        <input className={inputClass} name="sortOrder" placeholder="الترتيب" type="number" />
-        <label className="flex items-center gap-2 text-sm font-bold">
+        <CategoryField label="اسم الفئة">
+          <input className={inputClass} name="name" required />
+        </CategoryField>
+        <CategoryField label="slug">
+          <input className={inputClass} dir="ltr" name="slug" required />
+        </CategoryField>
+        <CategoryField label="الترتيب">
+          <input className={inputClass} name="sortOrder" type="number" />
+        </CategoryField>
+        <CategoryField label="رابط صورة الخلفية">
+          <input className={inputClass} dir="ltr" name="imageUrl" type="url" />
+        </CategoryField>
+        <CategoryField label="رفع صورة خلفية">
+          <input className={`${inputClass} file:ml-3 file:rounded-xl file:border-0 file:bg-[var(--light-cyan)] file:px-3 file:py-1 file:font-black`} name="imageFile" type="file" accept="image/*" />
+        </CategoryField>
+        <label className="flex min-h-11 items-center gap-2 self-end text-sm font-bold">
           <input defaultChecked name="isActive" type="checkbox" /> نشطة
         </label>
-        <textarea className={`${inputClass} min-h-20 lg:col-span-5`} name="description" placeholder="الوصف" />
-        <SubmitButton className="btn-primary lg:col-span-5" pendingText="جار إضافة الفئة...">
-          إضافة فئة
+        <CategoryField className="md:col-span-2 lg:col-span-3" label="الوصف">
+          <textarea className={`${inputClass} min-h-24`} name="description" />
+        </CategoryField>
+        <SubmitButton className="btn-primary md:col-span-2 lg:col-span-3" pendingText="جار حفظ الفئة...">
+          حفظ الفئة
         </SubmitButton>
       </form>
 
@@ -93,7 +116,7 @@ export default async function DashboardCategoriesPage({
             <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <h2 className="text-lg font-black text-[var(--text)]">
-                  {category.icon} {category.name}
+                  {category.name}
                 </h2>
                 <p className="text-sm font-bold text-[var(--muted)]">
                   {category.slug} · المنتجات: {category.productCount}
@@ -105,24 +128,32 @@ export default async function DashboardCategoriesPage({
             </div>
           <form
             action={saveCategory}
-            className="grid gap-3 lg:grid-cols-5"
+            className="grid gap-4 md:grid-cols-2 lg:grid-cols-3"
           >
             <input name="returnTo" type="hidden" value={currentPath} />
             <input name="id" type="hidden" value={category.id} />
-            <input className={inputClass} defaultValue={category.name} name="name" required />
-            <input className={inputClass} defaultValue={category.slug} name="slug" required />
-              <input className={inputClass} defaultValue={category.icon} name="icon" />
-              <input className={inputClass} defaultValue={category.image ?? ""} name="imageUrl" placeholder="رابط صورة الخلفية (اختياري)" />
-              <label className="flex items-center gap-2 text-sm font-bold">
-                رفع صورة خلفية
-                <input className="ml-2" name="imageFile" type="file" accept="image/*" />
-              </label>
-            <input className={inputClass} defaultValue={category.sortOrder ?? index} name="sortOrder" type="number" />
-            <label className="flex items-center gap-2 text-sm font-bold">
+            <CategoryField label="اسم الفئة">
+              <input className={inputClass} defaultValue={category.name} name="name" required />
+            </CategoryField>
+            <CategoryField label="slug">
+              <input className={inputClass} defaultValue={category.slug} dir="ltr" name="slug" required />
+            </CategoryField>
+            <CategoryField label="الترتيب">
+              <input className={inputClass} defaultValue={category.sortOrder ?? index} name="sortOrder" type="number" />
+            </CategoryField>
+            <CategoryField label="رابط صورة الخلفية">
+              <input className={inputClass} defaultValue={category.image ?? ""} dir="ltr" name="imageUrl" type="url" />
+            </CategoryField>
+            <CategoryField label="رفع صورة خلفية">
+              <input className={`${inputClass} file:ml-3 file:rounded-xl file:border-0 file:bg-[var(--light-cyan)] file:px-3 file:py-1 file:font-black`} name="imageFile" type="file" accept="image/*" />
+            </CategoryField>
+            <label className="flex min-h-11 items-center gap-2 self-end text-sm font-bold">
               <input defaultChecked={category.isActive !== false} name="isActive" type="checkbox" /> نشطة
             </label>
-            <textarea className={`${inputClass} min-h-20 lg:col-span-5`} defaultValue={category.description} name="description" />
-            <SubmitButton className="btn-primary lg:col-span-4" pendingText="جار حفظ الفئة...">
+            <CategoryField className="md:col-span-2 lg:col-span-3" label="الوصف">
+              <textarea className={`${inputClass} min-h-24`} defaultValue={category.description} name="description" />
+            </CategoryField>
+            <SubmitButton className="btn-primary md:col-span-2 lg:col-span-3" pendingText="جار حفظ الفئة...">
               حفظ الفئة
             </SubmitButton>
           </form>

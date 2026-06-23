@@ -61,8 +61,50 @@ const withNotice = (path: string, key: "success" | "error", message: string) => 
   return `${pathname}?${params.toString()}`;
 };
 
-const getErrorMessage = (error: unknown) =>
-  error instanceof Error ? error.message : "تعذر تنفيذ الإجراء الآن.";
+const getErrorMessage = (error: unknown) => {
+  if (
+    typeof error === "object" &&
+    error !== null &&
+    "code" in error &&
+    typeof error.code === "string"
+  ) {
+    console.error("Dashboard database action failed.", error);
+    return "تعذر حفظ البيانات الآن. راجع إعدادات قاعدة البيانات وحاول مرة أخرى.";
+  }
+
+  return error instanceof Error ? error.message : "تعذر تنفيذ الإجراء الآن.";
+};
+
+const missingCategoryImageMigrationMessage =
+  "لم يتم تطبيق تحديث قاعدة البيانات الخاص بصور الفئات. برجاء تطبيق migration قبل استخدام صور الفئات.";
+
+const requireCategoryImageColumn = async () => {
+  try {
+    const result = await query<{ exists: boolean }>(
+      `
+        select exists (
+          select 1
+          from information_schema.columns
+          where table_schema = 'public'
+            and table_name = 'categories'
+            and column_name = 'image_url'
+        ) as exists
+      `,
+    );
+
+    if (!result.rows[0]?.exists) {
+      console.error("Category save blocked: public.categories.image_url is missing.");
+      throw new Error(missingCategoryImageMigrationMessage);
+    }
+  } catch (error) {
+    if (error instanceof Error && error.message === missingCategoryImageMigrationMessage) {
+      throw error;
+    }
+
+    console.error("Failed to verify the category image database migration.", error);
+    throw new Error("تعذر التحقق من تحديث قاعدة البيانات الخاص بصور الفئات.");
+  }
+};
 
 const validateSlug = (slug: string) => {
   if (!slug || !slugPattern.test(slug)) {
@@ -105,6 +147,7 @@ export const saveCategory = async (formData: FormData) => {
   try {
     await requireAdmin();
     requireDatabase();
+    await requireCategoryImageColumn();
 
     const id = String(formData.get("id") ?? "");
     const slug = String(formData.get("slug") ?? "").trim();
@@ -126,7 +169,6 @@ export const saveCategory = async (formData: FormData) => {
     const values = [
       slug,
       name,
-      String(formData.get("icon") ?? "").trim() || "•",
       String(formData.get("description") ?? "").trim(),
       Number(formData.get("sortOrder") ?? 0),
       boolFromForm(formData, "isActive"),
@@ -137,16 +179,16 @@ export const saveCategory = async (formData: FormData) => {
       await query(
         `
           update categories
-          set slug = $1, name = $2, icon = $3, description = $4, sort_order = $5, is_active = $6, image_url = $7, updated_at = now()
-          where id = $8
+          set slug = $1, name = $2, description = $3, sort_order = $4, is_active = $5, image_url = $6, updated_at = now()
+          where id = $7
         `,
         [...values, Number(id)],
       );
     } else {
       await query(
         `
-          insert into categories (slug, name, icon, description, sort_order, is_active, image_url)
-          values ($1, $2, $3, $4, $5, $6, $7)
+          insert into categories (slug, name, description, sort_order, is_active, image_url)
+          values ($1, $2, $3, $4, $5, $6)
         `,
         values,
       );
