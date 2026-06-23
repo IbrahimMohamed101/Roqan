@@ -59,8 +59,16 @@ export default async function OrderConfirmationPage({
                   <span>{formatPrice(item.totalPrice)}</span>
                 </div>
               ))}
+              <div className="mt-2 flex justify-between border-t border-[var(--border)] pt-3 text-[var(--muted)]">
+                <span>المحافظة</span>
+                <span>{order.governorate}</span>
+              </div>
+              <div className="flex justify-between text-[var(--muted)]">
+                <span>سعر التوصيل</span>
+                <span>{formatPrice(order.shipping)}</span>
+              </div>
               <div className="mt-2 flex justify-between border-t border-[var(--border)] pt-3 text-[var(--primary)]">
-                <span>الإجمالي</span>
+                <span>الإجمالي شامل التوصيل</span>
                 <span>{formatPrice(order.total)}</span>
               </div>
             </div>

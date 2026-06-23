@@ -3,6 +3,7 @@ import Link from "next/link";
 import { CheckoutForm } from "@/components/store/CheckoutForm";
 import { OrderSummary } from "@/components/store/OrderSummary";
 import { getStoreSettings } from "@/lib/storeSettings";
+import { getActiveGovernorates } from "@/lib/shipping";
 
 export const metadata: Metadata = {
   title: "إتمام الطلب | روقان",
@@ -14,6 +15,7 @@ export const metadata: Metadata = {
 
 export default async function CheckoutPage() {
   const settings = await getStoreSettings();
+  const governorates = await getActiveGovernorates();
   return (
     <div>
       <div className="bg-[linear-gradient(135deg,#119b7d_0%,#0f8f76_100%)] py-2.5 text-center text-xs font-black text-white sm:py-3 sm:text-sm">
@@ -29,7 +31,7 @@ export default async function CheckoutPage() {
           </p>
         </div>
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_390px] lg:items-start">
-          <CheckoutForm />
+          <CheckoutForm governorates={governorates} />
           <div className="grid gap-4 self-start">
             <OrderSummary checkoutFormId="checkout-form" showConfirmButton termsUrl={settings.termsUrl} />
           <div className="rounded-[22px] border border-[var(--border)] bg-white p-4 text-xs font-bold leading-6 text-[var(--muted)] shadow-soft">

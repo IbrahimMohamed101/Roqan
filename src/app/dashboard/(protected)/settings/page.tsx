@@ -1,6 +1,7 @@
 import { saveStoreSettings } from "../actions";
 import { Notice } from "@/components/dashboard/Notice";
 import { SubmitButton } from "@/components/dashboard/SubmitButton";
+import { ProductImageField } from "@/components/dashboard/ProductImageField";
 import { getStoreSettings } from "@/lib/storeSettings";
 
 const inputClass =
@@ -51,7 +52,7 @@ export default async function SettingsPage({ searchParams }: SettingsPageProps) 
             <input className={inputClass} defaultValue={settings.storeLogoUrl} name="storeLogoUrl" />
           </Field>
           <Field label="أو ارفع شعارًا جديدًا">
-            <input className={`${inputClass} file:ml-3 file:rounded-xl file:border-0 file:bg-[var(--light-cyan)] file:px-3 file:py-1 file:font-black`} name="storeLogoFile" type="file" accept="image/*" />
+            <ProductImageField defaultValue={settings.storeLogoUrl} inputClass={inputClass} urlName="storeLogoUrl" fileName="storeLogoFile" previewAlt="معاينة الشعار" />
           </Field>
         </fieldset>
 

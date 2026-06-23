@@ -378,6 +378,67 @@ export const deactivateCategory = async (formData: FormData) => {
   redirect(withNotice(returnTo, "success", "تم إلغاء تفعيل الفئة."));
 };
 
+export const saveShippingGovernorate = async (formData: FormData) => {
+  const returnTo = getReturnTo(formData, "/dashboard/shipping");
+
+  try {
+    await requireAdmin();
+    requireDatabase();
+
+    const id = String(formData.get("id") ?? "");
+    const slug = String(formData.get("slug") ?? "").trim();
+    const name = String(formData.get("name") ?? "").trim();
+    const deliveryFee = Number(formData.get("deliveryFee") ?? 0) || 0;
+    const sortOrder = numberFromForm(formData.get("sortOrder")) ?? 0;
+    const isActive = boolFromForm(formData, "isActive");
+
+    if (!name) throw new Error("اسم المحافظة مطلوب.");
+    if (!slug) throw new Error("الـ slug مطلوب.");
+
+    if (deliveryFee < 0) throw new Error("سعر التوصيل يجب أن يكون رقمًا أكبر من أو يساوي صفر.");
+
+    if (id) {
+      await query(
+        `update shipping_governorates set name = $1, slug = $2, delivery_fee = $3, is_active = $4, sort_order = $5, updated_at = now() where id = $6`,
+        [name, slug, deliveryFee, isActive, sortOrder, id],
+      );
+    } else {
+      await query(
+        `insert into shipping_governorates (slug, name, delivery_fee, is_active, sort_order) values ($1,$2,$3,$4,$5)`,
+        [slug, name, deliveryFee, isActive, sortOrder],
+      );
+    }
+
+    revalidatePath("/dashboard/shipping");
+  } catch (error) {
+    redirect(withNotice(returnTo, "error", getErrorMessage(error)));
+  }
+
+  redirect(withNotice(returnTo, "success", "تم حفظ المحافظة بنجاح."));
+};
+
+export const deactivateShippingGovernorate = async (formData: FormData) => {
+  const returnTo = getReturnTo(formData, "/dashboard/shipping");
+
+  try {
+    await requireAdmin();
+    requireDatabase();
+
+    const id = String(formData.get("id") ?? "");
+    if (!id) {
+      throw new Error("معرّف المحافظة غير صحيح.");
+    }
+
+    // toggle active state (UUID)
+    await query("update shipping_governorates set is_active = not is_active, updated_at = now() where id = $1", [id]);
+    revalidatePath("/dashboard/shipping");
+  } catch (error) {
+    redirect(withNotice(returnTo, "error", getErrorMessage(error)));
+  }
+
+  redirect(withNotice(returnTo, "success", "تم تحديث حالة المحافظة."));
+};
+
 export const updateOrderStatus = async (formData: FormData) => {
   const returnTo = getReturnTo(formData, "/dashboard");
 

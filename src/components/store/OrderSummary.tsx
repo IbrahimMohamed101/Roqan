@@ -18,8 +18,8 @@ export function OrderSummary({
   showConfirmButton,
   termsUrl = "/terms",
 }: OrderSummaryProps) {
-  const { items, subtotal, totalItems } = useCart();
-  const shipping = subtotal > 0 ? SHIPPING_FEE : 0;
+  const { items, subtotal, totalItems, selectedGovernorate } = useCart();
+  const shipping = subtotal > 0 ? (selectedGovernorate?.deliveryFee ?? SHIPPING_FEE) : 0;
   const total = subtotal + shipping;
 
   return (
@@ -71,8 +71,8 @@ export function OrderSummary({
           <span>{formatPrice(subtotal)}</span>
         </div>
         <div className="flex justify-between gap-4">
-          <span>الشحن التقديري</span>
-          <span>{formatPrice(shipping)}</span>
+          <span>سعر التوصيل</span>
+          <span>{selectedGovernorate ? formatPrice(shipping) : "يتم حسابها بعد اختيار المحافظة"}</span>
         </div>
       </div>
       <div className="mt-4 flex justify-between gap-4 rounded-2xl bg-[var(--soft-surface)] px-3 py-3 text-base font-black text-[var(--primary)] sm:mt-5 sm:px-4 sm:py-4 sm:text-lg">

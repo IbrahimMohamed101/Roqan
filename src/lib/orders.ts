@@ -5,6 +5,7 @@ import type { CheckoutPayload, OrderRecord, OrderStatus } from "@/types/order";
 import { hasDatabaseUrl, getPool, query } from "@/lib/db";
 import { getProducts } from "@/lib/catalog";
 import { SHIPPING_FEE } from "@/lib/storeConfig";
+import { findGovernorateBySlugOrName } from "@/lib/shipping";
 
 type OrderRow = {
   id: number;
@@ -160,7 +161,8 @@ export const buildWhatsAppOrderMessage = (order: OrderRecord, storeName = "رو�
     `العنوان: ${order.governorate}${order.city ? ` - ${order.city}` : ""} - ${order.address}`,
     "المنتجات:",
     items,
-    `الإجمالي: ${order.total} جنيه`,
+    `سعر التوصيل: ${order.shipping} جنيه`,
+    `الإجمالي شامل التوصيل: ${order.total} جنيه`,
     order.notes ? `ملاحظات: ${order.notes}` : "",
   ]
     .filter(Boolean)
@@ -201,7 +203,12 @@ export const createOrder = async (payload: CheckoutPayload) => {
       (total, item) => total + (item.product?.price ?? 0) * item.quantity,
       0,
     );
-    const shipping = subtotal > 0 ? SHIPPING_FEE : 0;
+    let shipping = 0;
+    if (subtotal > 0) {
+      // Try to resolve governorate fee when running without a DB
+      const governorate = await findGovernorateBySlugOrName(payload.governorate.trim());
+      shipping = governorate ? governorate.deliveryFee : SHIPPING_FEE;
+    }
     const total = subtotal + shipping;
     const mockOrder: OrderRecord = {
       id: Date.now(),
@@ -276,7 +283,11 @@ export const createOrder = async (payload: CheckoutPayload) => {
     }
 
     const subtotal = lockedItems.reduce((total, item) => total + item.totalPrice, 0);
-    const shipping = subtotal > 0 ? SHIPPING_FEE : 0;
+    let shipping = 0;
+    if (subtotal > 0) {
+      const governorate = await findGovernorateBySlugOrName(payload.governorate.trim());
+      shipping = governorate ? governorate.deliveryFee : SHIPPING_FEE;
+    }
     const total = subtotal + shipping;
     const orderResult = await client.query<OrderRow>(
       `

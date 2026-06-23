@@ -17,6 +17,8 @@ type StoredCartItem = {
 
 type CartContextValue = {
   items: CartItem[];
+  selectedGovernorate?: { name: string; slug: string; deliveryFee?: number } | null;
+  setSelectedGovernorate: (g?: { name: string; slug: string; deliveryFee?: number } | null) => void;
   addItem: (product: Product, quantity?: number) => void;
   increaseItem: (slug: string) => void;
   decreaseItem: (slug: string) => void;
@@ -87,6 +89,9 @@ export function CartProvider({
   products: Product[];
 }) {
   const [items, setItems] = useState<CartItem[]>([]);
+  const [selectedGovernorate, setSelectedGovernorate] = useState<
+    { name: string; slug: string; deliveryFee?: number } | null
+  >(null);
 
   useEffect(() => {
     setItems(hydrateStoredItems(readStoredItems(), products));
@@ -96,14 +101,27 @@ export function CartProvider({
     if (typeof window === "undefined") {
       return;
     }
-
+    const maybe = window.localStorage.getItem("rooqan-checkout-governorate");
+    if (maybe) {
+      try {
+        setSelectedGovernorate(JSON.parse(maybe));
+      } catch {}
+    }
     const storedItems = items.map((item) => ({
       slug: item.product.slug,
       quantity: item.quantity,
     }));
 
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(storedItems));
-  }, [items]);
+    if (selectedGovernorate) {
+      window.localStorage.setItem(
+        "rooqan-checkout-governorate",
+        JSON.stringify(selectedGovernorate),
+      );
+    } else {
+      window.localStorage.removeItem("rooqan-checkout-governorate");
+    }
+  }, [items, selectedGovernorate]);
 
   const addItem = useCallback((product: Product, quantity = 1) => {
     if (product.stock <= 0) {
@@ -169,9 +187,18 @@ export function CartProvider({
     setItems([]);
   }, []);
 
+  const setSelectedGovernorateWrapped = useCallback(
+    (g?: { name: string; slug: string; deliveryFee?: number } | null) => {
+      setSelectedGovernorate(g ?? null);
+    },
+    [],
+  );
+
   const value = useMemo(
     () => ({
       items,
+      selectedGovernorate,
+      setSelectedGovernorate: setSelectedGovernorateWrapped,
       addItem,
       increaseItem,
       decreaseItem,
@@ -183,7 +210,7 @@ export function CartProvider({
         0,
       ),
     }),
-    [addItem, clearCart, decreaseItem, increaseItem, items, removeItem],
+    [addItem, clearCart, decreaseItem, increaseItem, items, removeItem, selectedGovernorate, setSelectedGovernorateWrapped],
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

@@ -15,8 +15,8 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     serverActions: {
-      // allow up to 5mb body for Server Actions (used by image uploads)
-      bodySizeLimit: "5mb",
+      // allow up to 6mb body for Server Actions (used by image uploads)
+      bodySizeLimit: "6mb",
     },
   },
 };

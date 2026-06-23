@@ -2,6 +2,7 @@ import { deactivateCategory, saveCategory } from "../actions";
 import { ConfirmSubmitButton } from "@/components/dashboard/ConfirmSubmitButton";
 import { Notice } from "@/components/dashboard/Notice";
 import { SubmitButton } from "@/components/dashboard/SubmitButton";
+import { ProductImageField } from "@/components/dashboard/ProductImageField";
 import { getCategories } from "@/lib/catalog";
 
 const inputClass =
@@ -85,11 +86,8 @@ export default async function DashboardCategoriesPage({
         <CategoryField label="الترتيب">
           <input className={inputClass} name="sortOrder" type="number" />
         </CategoryField>
-        <CategoryField label="رابط صورة الخلفية">
-          <input className={inputClass} dir="ltr" name="imageUrl" type="url" />
-        </CategoryField>
-        <CategoryField label="رفع صورة خلفية">
-          <input className={`${inputClass} file:ml-3 file:rounded-xl file:border-0 file:bg-[var(--light-cyan)] file:px-3 file:py-1 file:font-black`} name="imageFile" type="file" accept="image/*" />
+        <CategoryField label="صورة الخلفية">
+          <ProductImageField inputClass={inputClass} />
         </CategoryField>
         <label className="flex min-h-11 items-center gap-2 self-end text-sm font-bold">
           <input defaultChecked name="isActive" type="checkbox" /> نشطة
@@ -145,11 +143,8 @@ export default async function DashboardCategoriesPage({
             <CategoryField label="الترتيب">
               <input className={inputClass} defaultValue={category.sortOrder ?? index} name="sortOrder" type="number" />
             </CategoryField>
-            <CategoryField label="رابط صورة الخلفية">
-              <input className={inputClass} defaultValue={category.image ?? ""} dir="ltr" name="imageUrl" type="url" />
-            </CategoryField>
-            <CategoryField label="رفع صورة خلفية">
-              <input className={`${inputClass} file:ml-3 file:rounded-xl file:border-0 file:bg-[var(--light-cyan)] file:px-3 file:py-1 file:font-black`} name="imageFile" type="file" accept="image/*" />
+            <CategoryField label="صورة الخلفية">
+              <ProductImageField defaultValue={category.image} inputClass={inputClass} />
             </CategoryField>
             <label className="flex min-h-11 items-center gap-2 self-end text-sm font-bold">
               <input defaultChecked={category.isActive !== false} name="isActive" type="checkbox" /> نشطة

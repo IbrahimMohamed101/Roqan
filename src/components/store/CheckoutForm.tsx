@@ -11,35 +11,7 @@ const inputClass =
 
 const egyptianMobilePattern = /^01[0125][0-9]{8}$/;
 
-const governorates = [
-  "القاهرة",
-  "الجيزة",
-  "الإسكندرية",
-  "الدقهلية",
-  "البحر الأحمر",
-  "البحيرة",
-  "الفيوم",
-  "الغربية",
-  "الإسماعيلية",
-  "المنوفية",
-  "المنيا",
-  "القليوبية",
-  "الوادي الجديد",
-  "السويس",
-  "أسوان",
-  "أسيوط",
-  "بني سويف",
-  "بورسعيد",
-  "دمياط",
-  "الشرقية",
-  "جنوب سيناء",
-  "كفر الشيخ",
-  "مطروح",
-  "الأقصر",
-  "قنا",
-  "شمال سيناء",
-  "سوهاج",
-];
+// governorates are loaded from server and passed as a prop
 
 function StepCard({
   children,
@@ -67,9 +39,13 @@ function HelperText({ children }: { children: React.ReactNode }) {
   return <span className="text-xs font-bold leading-6 text-[var(--muted)]">{children}</span>;
 }
 
-export function CheckoutForm() {
+export function CheckoutForm({
+  governorates,
+}: {
+  governorates?: { name: string; slug: string; deliveryFee?: number }[];
+}) {
   const router = useRouter();
-  const { items, clearCart } = useCart();
+  const { items, clearCart, setSelectedGovernorate } = useCart();
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -174,17 +150,26 @@ export function CheckoutForm() {
         <div className="grid gap-3 sm:gap-4">
           <label className="grid gap-2 text-sm font-bold text-[var(--text)]">
             المحافظة *
-            <select className={inputClass} defaultValue="" name="governorate">
+            <select
+              className={inputClass}
+              defaultValue=""
+              name="governorate"
+              onChange={(e) => {
+                const slug = e.currentTarget.value;
+                const found = (governorates ?? []).find((g) => g.slug === slug);
+                setSelectedGovernorate(found ?? { name: slug, slug });
+              }}
+            >
               <option disabled value="">
                 اضغط هنا واختر محافظتك
               </option>
-              {governorates.map((governorate) => (
-                <option key={governorate} value={governorate}>
-                  {governorate}
+              {(governorates ?? []).map((g) => (
+                <option key={g.slug} value={g.slug}>
+                  {g.name}
                 </option>
               ))}
             </select>
-            <HelperText>رسوم الشحن ثابتة حاليًا، وسيتم تأكيد التفاصيل قبل الشحن.</HelperText>
+            <HelperText>سعر التوصيل سيُحسب بعد اختيار المحافظة.</HelperText>
           </label>
           <label className="grid gap-2 text-sm font-bold text-[var(--text)]">
             العنوان بالتفصيل *
