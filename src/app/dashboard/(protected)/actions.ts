@@ -75,6 +75,26 @@ const getErrorMessage = (error: unknown) => {
   return error instanceof Error ? error.message : "تعذر تنفيذ الإجراء الآن.";
 };
 
+const sanitizeUserError = (error: unknown) => {
+  // Known safe messages (already in Arabic) are returned as-is.
+  if (error instanceof Error) {
+    const msg = error.message;
+    const known = [
+      "يُسمح برفع ملفات الصور فقط.",
+      "حجم الصورة يجب ألا يتجاوز 5 ميجابايت.",
+      "رابط الصورة يجب أن يكون رابط HTTPS صحيحًا.",
+      "اسم الفئة مطلوب.",
+      "الـ slug مطلوب ويجب أن يحتوي على حروف إنجليزية صغيرة وأرقام وشرطات فقط.",
+      missingCategoryImageMigrationMessage,
+    ];
+
+    if (known.includes(msg)) return msg;
+  }
+
+  // Fallback generic message shown to users (no technical details in URL)
+  return "حدث خطأ أثناء حفظ التغييرات. حاول مرة أخرى لاحقًا.";
+};
+
 const missingCategoryImageMigrationMessage =
   "لم يتم تطبيق تحديث قاعدة البيانات الخاص بصور الفئات. برجاء تطبيق migration قبل استخدام صور الفئات.";
 
@@ -198,7 +218,8 @@ export const saveCategory = async (formData: FormData) => {
     revalidatePath("/dashboard/categories");
   } catch (error) {
     console.error("Category save failed.", error);
-    redirect(withNotice(returnTo, "error", "category_save_failed"));
+    const userMsg = sanitizeUserError(error);
+    redirect(withNotice(returnTo, "error", userMsg));
   }
 
   redirect(withNotice(returnTo, "success", "تم حفظ الفئة بنجاح."));
@@ -306,7 +327,8 @@ export const saveProduct = async (formData: FormData) => {
     revalidatePath("/");
     revalidatePath("/dashboard/products");
   } catch (error) {
-    redirect(withNotice(returnTo, "error", getErrorMessage(error)));
+    const userMsg = sanitizeUserError(error);
+    redirect(withNotice(returnTo, "error", userMsg));
   }
 
   redirect(withNotice(returnTo, "success", "تم حفظ المنتج بنجاح."));
