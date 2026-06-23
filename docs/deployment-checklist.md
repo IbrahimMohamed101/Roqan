@@ -4,10 +4,13 @@ Use this checklist before client delivery or production deployment.
 
 ## Database
 
+- [ ] Confirm `DATABASE_URL` points to the intended production database before running any migration.
 - [ ] Neon project created.
 - [ ] `db/schema.sql` applied successfully.
 - [ ] All files in `db/migrations/` applied successfully.
 - [ ] `db/migrations/2026-06-16-add-order-alternate-phone.sql` applied.
+- [ ] `db/migrations/2026-06-23-add-category-image.sql` applied to production.
+- [ ] `categories.image_url` exists after applying the category image migration.
 - [ ] Products and categories seeded or added from dashboard.
 - [ ] `DATABASE_URL` uses `sslmode=verify-full`.
 - [ ] PostgreSQL SSL warning is resolved in local/prod build logs.
@@ -52,9 +55,11 @@ Use this checklist before client delivery or production deployment.
 - [ ] Governorate dropdown works.
 - [ ] Alternate phone field is accepted.
 - [ ] Successful checkout creates an order.
+- [ ] A final test order has been placed against the intended environment.
 - [ ] Stock decrements after checkout.
 - [ ] Order confirmation page loads.
 - [ ] WhatsApp confirmation button opens with order details.
+- [ ] WhatsApp number matches the value saved in `/dashboard/settings`.
 - [ ] Order appears in admin dashboard.
 - [ ] Admin can update order status.
 
@@ -66,9 +71,11 @@ Use this checklist before client delivery or production deployment.
 - [ ] Product edit works.
 - [ ] Product deactivate works.
 - [ ] Cloudinary product image upload works.
+- [ ] Store information and contact details in `/dashboard/settings` are correct.
 - [ ] Category create works.
 - [ ] Category edit works.
 - [ ] Category deactivate works.
+- [ ] Cloudinary category image upload works.
 
 ## SEO And Policy
 
@@ -79,4 +86,3 @@ Use this checklist before client delivery or production deployment.
 - [ ] Privacy policy reviewed.
 - [ ] Terms and conditions reviewed.
 - [ ] Canonical site URL matches production domain.
-
