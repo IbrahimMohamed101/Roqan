@@ -128,7 +128,12 @@ export default async function DashboardProductsPage({
       >
         <input name="returnTo" type="hidden" value={currentPath} />
         <input className={inputClass} name="name" placeholder="اسم المنتج" required />
-        <input className={inputClass} name="slug" placeholder="slug" required />
+        <div className="grid gap-1">
+          <input className={inputClass} dir="ltr" name="slug" placeholder="slug (اختياري - يتم إنشاؤه تلقائياً)" />
+          <p className="text-xs text-[var(--muted)]">
+            يمكنك ترك هذا الحقل فارغاً، وسيقوم النظام بإنشاء الرابط تلقائياً من اسم المنتج.
+          </p>
+        </div>
         <select className={inputClass} name="categoryId" required>
           {categories.map((category) => (
             <option key={category.id} value={category.id}>
@@ -196,7 +201,12 @@ export default async function DashboardProductsPage({
               <input name="returnTo" type="hidden" value={currentPath} />
               <input name="id" type="hidden" value={product.id} />
               <input className={inputClass} defaultValue={product.name} name="name" required />
-              <input className={inputClass} defaultValue={product.slug} name="slug" required />
+              <div className="grid gap-1">
+                <input className={inputClass} defaultValue={product.slug} dir="ltr" name="slug" />
+                <p className="text-xs text-[var(--muted)]">
+                  اختياري - سيتم الحفاظ على الرابط الحالي إذا لم تغيره.
+                </p>
+              </div>
               <select className={inputClass} defaultValue={categories.find((category) => category.slug === product.categorySlug)?.id} name="categoryId" required>
                 {categories.map((category) => (
                   <option key={category.id} value={category.id}>

@@ -29,8 +29,11 @@ export default async function DashboardShippingPage({ searchParams }: { searchPa
         <GovernorateField label="اسم المحافظة">
           <input className={inputClass} name="name" required />
         </GovernorateField>
-        <GovernorateField label="slug">
-          <input className={inputClass} dir="ltr" name="slug" required />
+        <GovernorateField label="slug (اختياري - يتم إنشاؤه تلقائياً)">
+          <input className={inputClass} dir="ltr" name="slug" />
+          <p className="text-xs text-[var(--muted)] mt-1">
+            يمكنك ترك هذا الحقل فارغاً، وسيقوم النظام بإنشاء الرابط تلقائياً.
+          </p>
         </GovernorateField>
         <GovernorateField label="سعر التوصيل">
           <input className={inputClass} name="deliveryFee" type="number" defaultValue={60} />
@@ -65,8 +68,11 @@ export default async function DashboardShippingPage({ searchParams }: { searchPa
               <GovernorateField label="اسم المحافظة">
                 <input className={inputClass} defaultValue={g.name} name="name" required />
               </GovernorateField>
-              <GovernorateField label="slug">
-                <input className={inputClass} defaultValue={g.slug} dir="ltr" name="slug" required />
+              <GovernorateField label="slug (اختياري)">
+                <input className={inputClass} defaultValue={g.slug} dir="ltr" name="slug" />
+                <p className="text-xs text-[var(--muted)] mt-1">
+                  اختياري - سيتم الحفاظ على الرابط الحالي إذا لم تغيره.
+                </p>
               </GovernorateField>
               <GovernorateField label="سعر التوصيل">
                 <input className={inputClass} defaultValue={String(g.deliveryFee)} name="deliveryFee" type="number" />

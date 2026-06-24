@@ -12,9 +12,9 @@ import {
   type StoreSettings,
 } from "@/lib/storeSettings";
 import { normalizeWhatsAppNumber } from "@/lib/storeConfig";
+import { processSlug } from "@/lib/slug";
 
 const boolFromForm = (formData: FormData, key: string) => formData.get(key) === "on";
-const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const allowedOrderStatuses: OrderStatus[] = [
   "new",
   "confirmed",
@@ -84,7 +84,8 @@ const sanitizeUserError = (error: unknown) => {
       "حجم الصورة يجب ألا يتجاوز 5 ميجابايت.",
       "رابط الصورة يجب أن يكون رابط HTTPS صحيحًا.",
       "اسم الفئة مطلوب.",
-      "الـ slug مطلوب ويجب أن يحتوي على حروف إنجليزية صغيرة وأرقام وشرطات فقط.",
+      "اسم المنتج مطلوب.",
+      "تعذر إنشاء رابط فريد. برجاء المحاولة مرة أخرى.",
       missingCategoryImageMigrationMessage,
     ];
 
@@ -126,12 +127,6 @@ const requireCategoryImageColumn = async () => {
   }
 };
 
-const validateSlug = (slug: string) => {
-  if (!slug || !slugPattern.test(slug)) {
-    throw new Error("الـ slug مطلوب ويجب أن يحتوي على حروف إنجليزية صغيرة وأرقام وشرطات فقط.");
-  }
-};
-
 const validateHttpsUrl = (value: string) => {
   if (!value) {
     return;
@@ -170,13 +165,15 @@ export const saveCategory = async (formData: FormData) => {
     await requireCategoryImageColumn();
 
     const id = String(formData.get("id") ?? "");
-    const slug = String(formData.get("slug") ?? "").trim();
+    const inputSlug = String(formData.get("slug") ?? "").trim();
     const name = String(formData.get("name") ?? "").trim();
 
     if (!name) {
       throw new Error("اسم الفئة مطلوب.");
     }
-    validateSlug(slug);
+
+    // Process slug: normalize, auto-generate if empty, ensure uniqueness
+    const slug = await processSlug(inputSlug, "categories", name, id || undefined);
 
     const uploadedImage = formData.get("imageFile");
     let imageUrl = String(formData.get("imageUrl") ?? "").trim();
@@ -233,7 +230,7 @@ export const saveProduct = async (formData: FormData) => {
     requireDatabase();
 
     const id = String(formData.get("id") ?? "");
-    const slug = String(formData.get("slug") ?? "").trim();
+    const inputSlug = String(formData.get("slug") ?? "").trim();
     const name = String(formData.get("name") ?? "").trim();
     const categoryId = numberFromForm(formData.get("categoryId"));
     const price = numberFromForm(formData.get("price"));
@@ -244,7 +241,10 @@ export const saveProduct = async (formData: FormData) => {
     if (!name) {
       throw new Error("اسم المنتج مطلوب.");
     }
-    validateSlug(slug);
+
+    // Process slug: normalize, auto-generate if empty, ensure uniqueness
+    const slug = await processSlug(inputSlug, "products", name, id || undefined);
+
     if (!categoryId || categoryId < 1) {
       throw new Error("اختر فئة صحيحة للمنتج.");
     }
@@ -386,14 +386,16 @@ export const saveShippingGovernorate = async (formData: FormData) => {
     requireDatabase();
 
     const id = String(formData.get("id") ?? "");
-    const slug = String(formData.get("slug") ?? "").trim();
+    const inputSlug = String(formData.get("slug") ?? "").trim();
     const name = String(formData.get("name") ?? "").trim();
     const deliveryFee = Number(formData.get("deliveryFee") ?? 0) || 0;
     const sortOrder = numberFromForm(formData.get("sortOrder")) ?? 0;
     const isActive = boolFromForm(formData, "isActive");
 
     if (!name) throw new Error("اسم المحافظة مطلوب.");
-    if (!slug) throw new Error("الـ slug مطلوب.");
+
+    // Process slug: normalize, auto-generate if empty, ensure uniqueness
+    const slug = await processSlug(inputSlug, "shipping_governorates", name, id || undefined);
 
     if (deliveryFee < 0) throw new Error("سعر التوصيل يجب أن يكون رقمًا أكبر من أو يساوي صفر.");
 

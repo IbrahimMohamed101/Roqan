@@ -80,8 +80,11 @@ export default async function DashboardCategoriesPage({
         <CategoryField label="اسم الفئة">
           <input className={inputClass} name="name" required />
         </CategoryField>
-        <CategoryField label="slug">
-          <input className={inputClass} dir="ltr" name="slug" required />
+        <CategoryField label="slug (اختياري - يتم إنشاؤه تلقائياً)">
+          <input className={inputClass} dir="ltr" name="slug" />
+          <p className="text-xs text-[var(--muted)] mt-1">
+            يمكنك ترك هذا الحقل فارغاً، وسيقوم النظام بإنشاء الرابط تلقائياً.
+          </p>
         </CategoryField>
         <CategoryField label="الترتيب">
           <input className={inputClass} name="sortOrder" type="number" />
@@ -137,8 +140,11 @@ export default async function DashboardCategoriesPage({
             <CategoryField label="اسم الفئة">
               <input className={inputClass} defaultValue={category.name} name="name" required />
             </CategoryField>
-            <CategoryField label="slug">
-              <input className={inputClass} defaultValue={category.slug} dir="ltr" name="slug" required />
+            <CategoryField label="slug (اختياري)">
+              <input className={inputClass} defaultValue={category.slug} dir="ltr" name="slug" />
+              <p className="text-xs text-[var(--muted)] mt-1">
+                اختياري - سيتم الحفاظ على الرابط الحالي إذا لم تغيره.
+              </p>
             </CategoryField>
             <CategoryField label="الترتيب">
               <input className={inputClass} defaultValue={category.sortOrder ?? index} name="sortOrder" type="number" />
