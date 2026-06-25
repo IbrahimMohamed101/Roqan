@@ -23,6 +23,7 @@ create table if not exists products (
   stock integer not null default 0 check (stock >= 0),
   featured boolean not null default false,
   best_seller boolean not null default false,
+  is_best_seller boolean not null default false,
   is_new boolean not null default false,
   is_active boolean not null default true,
   created_at timestamptz not null default now(),

@@ -36,6 +36,13 @@ export function ProductCard({ product }: { product: Product }) {
     if (added) return "تمت الإضافة";
     return isMealProduct() ? "ترقية الوجبة" : "أضف للسلة";
   };
+  const featureBadge = product.isNew
+    ? "جديد"
+    : product.isBestSeller
+      ? "الأكثر مبيعًا"
+      : product.bestSeller
+        ? "الأكثر طلبًا"
+        : null;
 
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-[16px] border border-[var(--border)] bg-white shadow-soft transition duration-200 hover:-translate-y-1 hover:border-[rgba(17,155,181,0.45)] hover:shadow-[0_26px_56px_rgba(18,63,109,0.13)] sm:rounded-[24px]">
@@ -53,14 +60,9 @@ export function ProductCard({ product }: { product: Product }) {
         <span className="absolute right-2 top-2 z-10 sm:right-3 sm:top-3 product-badge product-badge--discount">
           <DiscountBadge discount={product.discount} />
         </span>
-        {product.isNew ? (
-          <span className="absolute left-2 top-2 z-10 product-badge product-badge--new sm:left-3 sm:top-3">
-            جديد
-          </span>
-        ) : null}
-        {product.bestSeller ? (
-          <span className="absolute left-2 top-12 z-10 product-badge sm:left-3 sm:top-14 bg-[var(--soft-peach)] text-[var(--coral)]">
-            الأكثر طلبًا
+        {featureBadge ? (
+          <span className={`absolute left-2 top-2 z-10 product-badge sm:left-3 sm:top-3 ${product.isBestSeller && !product.isNew ? "bg-[var(--soft-peach)] text-[var(--coral)]" : "product-badge--new"}`}>
+            {featureBadge}
           </span>
         ) : null}
       </Link>

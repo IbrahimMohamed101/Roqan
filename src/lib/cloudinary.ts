@@ -80,4 +80,11 @@ export const uploadProductImage = async (file: File) => {
 };
 
 export const isUploadedImageFile = (value: FormDataEntryValue | null): value is File =>
-  value instanceof File && value.size > 0;
+  typeof value === "object" &&
+  value !== null &&
+  "size" in value &&
+  "type" in value &&
+  "arrayBuffer" in value &&
+  typeof value.arrayBuffer === "function" &&
+  typeof value.size === "number" &&
+  value.size > 0;

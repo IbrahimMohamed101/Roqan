@@ -282,5 +282,6 @@ export const getProductsByCategory = (slug: string) =>
 
 export const featuredProducts = products.filter((product) => product.featured);
 export const bestSellerProducts = products.filter((product) => product.bestSeller);
+export const bestSellingProducts = products.filter((product) => product.isBestSeller);
 export const newProducts = products.filter((product) => product.isNew);
 export const offerProducts = products.filter((product) => product.discount);

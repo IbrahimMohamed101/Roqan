@@ -1,12 +1,13 @@
 import { HeroSection } from "@/components/store/HeroSection";
 import { SectionHeader } from "@/components/store/SectionHeader";
 import HomepageProducts from "@/components/store/HomepageProducts";
-import { getCatalog } from "@/lib/catalog";
+import { getBestSellingProducts, getCatalog } from "@/lib/catalog";
 import { getStoreSettings } from "@/lib/storeSettings";
 
 export default async function Home() {
-  const [{ categories, products }, settings] = await Promise.all([
+  const [{ categories, products }, bestSellingProducts, settings] = await Promise.all([
     getCatalog(),
+    getBestSellingProducts(8),
     getStoreSettings(),
   ]);
   
@@ -23,7 +24,11 @@ export default async function Home() {
           href="/categories"
           title="تسوق حسب الفئة"
         />
-        <HomepageProducts products={products} categories={categories} />
+        <HomepageProducts
+          products={products}
+          categories={categories}
+          bestSellingProducts={bestSellingProducts}
+        />
       </section>
 
       

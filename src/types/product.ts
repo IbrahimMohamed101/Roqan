@@ -23,6 +23,7 @@ export type Product = {
   stock: number;
   featured?: boolean;
   bestSeller?: boolean;
+  isBestSeller?: boolean;
   isNew?: boolean;
   isActive?: boolean;
 };

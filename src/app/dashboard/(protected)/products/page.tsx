@@ -155,6 +155,14 @@ export default async function DashboardProductsPage({
         <label className="flex items-center gap-2 text-sm font-bold">
           <input name="bestSeller" type="checkbox" /> الأكثر طلبًا
         </label>
+        <label className="grid gap-1 text-sm font-bold lg:col-span-2">
+          <span className="flex items-center gap-2">
+            <input name="isBestSeller" type="checkbox" /> الأكثر مبيعًا
+          </span>
+          <span className="text-xs font-semibold leading-5 text-[var(--muted)]">
+            يظهر المنتج في قسم الأكثر مبيعًا في الصفحة الرئيسية عند تفعيل هذا الخيار.
+          </span>
+        </label>
         <label className="flex items-center gap-2 text-sm font-bold">
           <input name="isNew" type="checkbox" /> جديد
         </label>
@@ -195,6 +203,11 @@ export default async function DashboardProductsPage({
                 <span className={`rounded-full px-3 py-1 ${product.stock === 0 ? "bg-red-50 text-red-700" : product.stock <= 5 ? "bg-amber-50 text-amber-700" : "bg-blue-50 text-blue-700"}`}>
                   المخزون: {product.stock}
                 </span>
+                {product.isBestSeller ? (
+                  <span className="rounded-full bg-[var(--soft-peach)] px-3 py-1 text-[var(--coral)]">
+                    الأكثر مبيعًا
+                  </span>
+                ) : null}
               </div>
             </summary>
             <form action={saveProduct} className="mt-4 grid gap-3 lg:grid-cols-4">
@@ -227,6 +240,14 @@ export default async function DashboardProductsPage({
               </label>
               <label className="flex items-center gap-2 text-sm font-bold">
                 <input defaultChecked={product.bestSeller} name="bestSeller" type="checkbox" /> الأكثر طلبًا
+              </label>
+              <label className="grid gap-1 text-sm font-bold lg:col-span-2">
+                <span className="flex items-center gap-2">
+                  <input defaultChecked={product.isBestSeller} name="isBestSeller" type="checkbox" /> الأكثر مبيعًا
+                </span>
+                <span className="text-xs font-semibold leading-5 text-[var(--muted)]">
+                  يظهر المنتج في قسم الأكثر مبيعًا في الصفحة الرئيسية عند تفعيل هذا الخيار.
+                </span>
               </label>
               <label className="flex items-center gap-2 text-sm font-bold">
                 <input defaultChecked={product.isNew} name="isNew" type="checkbox" /> جديد

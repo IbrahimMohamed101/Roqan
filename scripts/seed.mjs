@@ -452,11 +452,12 @@ const productUpsertSql = `
     stock,
     featured,
     best_seller,
+    is_best_seller,
     is_new,
     is_active,
     updated_at
   )
-  values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, now())
+  values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, now())
   on conflict (slug) do update set
     category_id = excluded.category_id,
     name = excluded.name,
@@ -467,6 +468,7 @@ const productUpsertSql = `
     stock = excluded.stock,
     featured = excluded.featured,
     best_seller = excluded.best_seller,
+    is_best_seller = excluded.is_best_seller,
     is_new = excluded.is_new,
     is_active = excluded.is_active,
     updated_at = now()
@@ -511,6 +513,7 @@ const seed = async () => {
         product.stock,
         product.featured,
         product.bestSeller,
+        product.isBestSeller ?? false,
         product.isNew,
         product.isActive,
       ]);

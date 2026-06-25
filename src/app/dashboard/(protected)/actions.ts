@@ -275,6 +275,7 @@ export const saveProduct = async (formData: FormData) => {
       stock,
       boolFromForm(formData, "featured"),
       boolFromForm(formData, "bestSeller"),
+      boolFromForm(formData, "isBestSeller"),
       boolFromForm(formData, "isNew"),
       boolFromForm(formData, "isActive"),
     ];
@@ -294,10 +295,11 @@ export const saveProduct = async (formData: FormData) => {
             stock = $8,
             featured = $9,
             best_seller = $10,
-            is_new = $11,
-            is_active = $12,
+            is_best_seller = $11,
+            is_new = $12,
+            is_active = $13,
             updated_at = now()
-          where id = $13
+          where id = $14
         `,
         [...values, Number(id)],
       );
@@ -315,10 +317,11 @@ export const saveProduct = async (formData: FormData) => {
             stock,
             featured,
             best_seller,
+            is_best_seller,
             is_new,
             is_active
           )
-          values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+          values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
         `,
         values,
       );

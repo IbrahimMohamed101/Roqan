@@ -29,6 +29,7 @@ type ProductRow = {
   stock: number;
   featured: boolean;
   best_seller: boolean;
+  is_best_seller: boolean;
   is_new: boolean;
   is_active: boolean;
 };
@@ -65,6 +66,7 @@ const mapProduct = (row: ProductRow): Product => {
     stock: row.stock,
     featured: row.featured,
     bestSeller: row.best_seller,
+    isBestSeller: row.is_best_seller,
     isNew: row.is_new,
     isActive: row.is_active,
   };
@@ -74,6 +76,8 @@ const fallbackCatalog = () => ({
   categories: fallbackCategories,
   products: fallbackProducts,
 });
+
+let hasProductIsBestSellerColumn: boolean | null = null;
 
 const isProduction = () => process.env.NODE_ENV === "production";
 
@@ -100,6 +104,28 @@ const handleCatalogError = (message: string, error: unknown) => {
   }
 
   console.error(message, error);
+};
+
+const productIsBestSellerSelect = async () => {
+  if (hasProductIsBestSellerColumn === true) {
+    return "p.is_best_seller";
+  }
+
+  const result = await query<{ exists: boolean }>(
+    `
+      select exists (
+        select 1
+        from information_schema.columns
+        where table_schema = 'public'
+          and table_name = 'products'
+          and column_name = 'is_best_seller'
+      ) as exists
+    `,
+  );
+
+  hasProductIsBestSellerColumn = result.rows[0]?.exists === true;
+
+  return hasProductIsBestSellerColumn ? "p.is_best_seller" : "false";
 };
 
 export const getCategories = async (includeInactive = false): Promise<Category[]> => {
@@ -151,6 +177,7 @@ export const getProducts = async (includeInactive = false): Promise<Product[]> =
   }
 
   try {
+    const isBestSellerSelect = await productIsBestSellerSelect();
     const result = await query<ProductRow>(
       `
         select
@@ -165,6 +192,7 @@ export const getProducts = async (includeInactive = false): Promise<Product[]> =
           p.stock,
           p.featured,
           p.best_seller,
+          ${isBestSellerSelect} as is_best_seller,
           p.is_new,
           p.is_active
         from products p
@@ -179,6 +207,56 @@ export const getProducts = async (includeInactive = false): Promise<Product[]> =
   } catch (error) {
     handleCatalogError("Failed to load products from database.", error);
     return fallbackProducts;
+  }
+};
+
+export const getBestSellingProducts = async (limit = 8): Promise<Product[]> => {
+  if (!hasDatabaseUrl()) {
+    return getFallbackProducts()
+      .filter((product) => product.isActive !== false && product.isBestSeller)
+      .slice(0, limit);
+  }
+
+  try {
+    const isBestSellerSelect = await productIsBestSellerSelect();
+    if (isBestSellerSelect === "false") {
+      return [];
+    }
+
+    const result = await query<ProductRow>(
+      `
+        select
+          p.id,
+          p.slug,
+          p.name,
+          c.slug as category_slug,
+          p.price,
+          p.old_price,
+          p.image_url,
+          p.description,
+          p.stock,
+          p.featured,
+          p.best_seller,
+          ${isBestSellerSelect} as is_best_seller,
+          p.is_new,
+          p.is_active
+        from products p
+        join categories c on c.id = p.category_id
+        where p.is_active = true
+          and c.is_active = true
+          and p.is_best_seller = true
+        order by p.created_at desc, p.id desc
+        limit $1
+      `,
+      [limit],
+    );
+
+    return result.rows.map(mapProduct);
+  } catch (error) {
+    handleCatalogError("Failed to load best-selling products from database.", error);
+    return fallbackProducts
+      .filter((product) => product.isActive !== false && product.isBestSeller)
+      .slice(0, limit);
   }
 };
 

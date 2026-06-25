@@ -8,9 +8,11 @@ import { CategoryChips } from "./CategoryChips";
 export default function HomepageProducts({
   products,
   categories,
+  bestSellingProducts,
 }: {
   products: Product[];
   categories: Category[];
+  bestSellingProducts?: Product[];
 }) {
   const [selected, setSelected] = useState<string | null>(null);
 
@@ -27,6 +29,26 @@ export default function HomepageProducts({
   return (
     <div>
       <CategoryChips categories={categories} selected={selected} onSelect={setSelected} />
+
+      {!selected && bestSellingProducts && bestSellingProducts.length > 0 ? (
+        <section className="mt-6 sm:mt-8">
+          <div className="mb-3 sm:mb-5">
+            <h2 className="text-lg font-black tracking-normal text-[var(--text)] min-[390px]:text-xl sm:text-3xl">
+              الأكثر مبيعًا
+            </h2>
+            <p className="mt-1 text-xs leading-5 text-[var(--muted)] sm:text-base sm:leading-7">
+              منتجات اختارها عملاؤنا بكثرة
+            </p>
+          </div>
+          <div className="-mx-4 flex snap-x gap-3 overflow-x-auto px-4 pb-2 [scrollbar-width:none] sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-4 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-4 lg:gap-5 [&::-webkit-scrollbar]:hidden">
+            {bestSellingProducts.map((product) => (
+              <div className="w-[76vw] flex-none snap-start min-[390px]:w-[64vw] sm:w-auto" key={product.slug}>
+                <ProductCard product={product} />
+              </div>
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4 lg:gap-5">
         {displayed.length === 0 ? (
